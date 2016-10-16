@@ -1,0 +1,60 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="my-station-list">
+  <style>
+    paper-radio-button {
+      display: block;
+    }
+  </style>
+  <template>
+    <h2 class="paper-font-display2">Sender</h2>
+    <paper-radio-group id="group" on-paper-radio-group-changed="_onChange" selected="{{selected}}">
+      <template is="dom-repeat" items="{{_stations}}">
+        <paper-radio-button name="{{item.short_name}}">{{item.name}}</paper-radio-button>
+      </template>
+    </paper-radio-group>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+      Polymer({ // jshint ignore:line
+        is: 'my-station-list',
+
+        properties: {
+          selected: {
+            type: String
+          },
+          _stations: {
+            type: Object,
+            value: [
+              {short_name: 'fm4', name: 'radio FM4'},  // jshint ignore:line
+              {short_name: 'oe3', name: 'Hitradio Ö3'}, // jshint ignore:line
+              {short_name: 'oe1', name: 'Radio Österreich 1'}, // jshint ignore:line
+
+              {short_name: 'bgl', name: 'Radio Burgenland'}, // jshint ignore:line
+              {short_name: 'ktn', name: 'Radio Kärnten'}, // jshint ignore:line
+              {short_name: 'noe', name: 'Radio Niederösterreich'}, // jshint ignore:line
+              {short_name: 'ooe', name: 'Radio Oberösterreich'}, // jshint ignore:line
+              {short_name: 'sbg', name: 'Radio Salzburg'}, // jshint ignore:line
+              {short_name: 'stm', name: 'Radio Steiermark'}, // jshint ignore:line
+              {short_name: 'tir', name: 'Radio Tirol'}, // jshint ignore:line
+              {short_name: 'vbg', name: 'Radio Vorarlberg'}, // jshint ignore:line
+              {short_name: 'wie', name: 'Radio Wien'} // jshint ignore:line
+            ]
+          }
+        },
+        _onChange: function(){
+          this.fire('update', this.selected);
+        }
+      });
+    })();
+  </script>
+</dom-module>

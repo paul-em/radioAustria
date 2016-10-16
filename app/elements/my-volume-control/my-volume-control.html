@@ -1,0 +1,58 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<dom-module id="my-volume-control">
+  <style>
+    paper-slider {
+      width: 100%;
+      --paper-slider-knob-color: var(--text-primary-color);
+      --paper-slider-active-color: var(--dark-primary-color);
+      --paper-slider-pin-color: var(--dark-primary-color);
+    }
+  </style>
+  <template>
+    <paper-slider value="{{volume}}" max="100" on-value-change="_valueChange"></paper-slider>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+      var self;
+      Polymer({ // jshint ignore:line
+        is: 'my-volume-control',
+        properties: {
+          volume: {
+            type: Number,
+            value: 100
+          }
+        },
+        _valueChange: function () {
+          this.fire('update', this.volume);
+        },
+        ready: function () {
+          self = this;
+          document.addEventListener('keydown', function (e) {
+            if (e.keyCode === 107 || e.keyCode === 187) {
+              self.volume += 10;
+              if(self.volume > 100){
+                self.volume = 100;
+              }
+            } else if (e.keyCode === 109 || e.keyCode === 189) {
+              self.volume -= 10;
+              if(self.volume < 0){
+                self.volume = 0;
+              }
+            }
+          }, false);
+        }
+      });
+    })();
+  </script>
+</dom-module>

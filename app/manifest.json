@@ -1,0 +1,50 @@
+{
+  "name": "radio FM4",
+  "short_name": "fm4",
+  "author": "Paul Em",
+  "description": "radio livestream player",
+  "version": "2.7",
+  "manifest_version": 2,
+  "icons": {
+    "16": "images/logos/fm4-16.png",
+    "128": "images/logos/fm4-128-round.png"
+  },
+  "app": {
+    "background": {
+      "scripts": [
+        "scripts/background.js"
+      ]
+    },
+    "streamurl": "http://mp3stream1.apasf.apa.at:8000/;",
+    "streamtype'": "audio/mpeg",
+    "tracklist": "http://hop.orf.at/img-trackservice/fm4.js",
+    "curProgram": "http://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=Wochen-Plan-Fm4.xml",
+    "website": "http://fm4.orf.at",
+    "color": "#FDB815"
+  },
+  "commands": {
+    "playPauseMusic": {
+      "suggested_key": {
+        "default": "MediaPlayPause"
+      },
+      "description": "Play and Pause the radio",
+      "global": true
+    },
+    "stopMusic": {
+      "suggested_key": {
+        "default": "MediaStop"
+      },
+      "description": "Stop the radio",
+      "global": true
+    }
+  },
+  "permissions": [
+    "storage",
+    "notifications",
+    "alwaysOnTopWindows",
+    "http://hop.orf.at/img-trackservice/fm4.js",
+    "http://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp",
+    "http://mp3stream1.apasf.apa.at:8000/"
+  ],
+  "offline_enabled": false
+}

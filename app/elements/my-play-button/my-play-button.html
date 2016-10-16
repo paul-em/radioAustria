@@ -1,0 +1,108 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="my-play-button">
+  <style>
+    paper-fab {
+      background-color: var(--primary-background-color);
+      color: var(--default-primary-color);
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+  <template>
+    <audio id="audio" src="{{url}}" autoplay></audio>
+    <paper-fab id="button" icon="{{icon}}" on-click="_handleClick"></paper-fab>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+      var errorCounter = 0, self;
+
+      function reload() {
+        self.$.audio.load();
+        self.$.audio.play();
+      }
+
+      function toggle() {
+        if (self.$.audio.paused) {
+          reload();
+          self.icon = 'av:pause';
+        } else {
+          self.$.audio.pause();
+          self.icon = 'av:play-arrow';
+        }
+      }
+
+      if (window.chrome && window.chrome.commands) {
+        window.chrome.commands.onCommand.addListener(function (command) {
+          console.log('Command:', command);
+          switch (command) {
+            case 'playPauseMusic':
+              toggle();
+              break;
+            case 'stopMusic':
+              break;
+          }
+        });
+      }
+
+      Polymer({ // jshint ignore:line
+        is: 'my-play-button',
+
+        properties: {
+          url: {
+            type: String
+          },
+          icon: {
+            type: String,
+            value: 'av:play-arrow'
+          },
+          volume: {
+            type: Number,
+            value: 100,
+            observer: '_volumeChange'
+          }
+        },
+        _volumeChange: function (volume) {
+          this.$.audio.volume = (volume / 100);
+        },
+        _handleClick: function () {
+          toggle();
+        },
+        ready: function () {
+          self = this;
+          this.$.audio.addEventListener('error', function () {
+            errorCounter++;
+            if (errorCounter < 20) {
+              setTimeout(reload, 10);
+            } else {
+              self.icon = 'av:not-interested';
+            }
+          });
+
+          this.$.audio.addEventListener('playing', function () {
+            errorCounter = 0;
+            self.icon = 'av:pause';
+          });
+
+          document.addEventListener('keydown', function (e) {
+            if (e.keyCode === 32) {
+              toggle();
+              e.preventDefault();
+            }
+          }, false);
+        }
+      });
+    })();
+  </script>
+</dom-module>

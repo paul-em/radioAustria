@@ -1,0 +1,73 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="my-track">
+  <style>
+    :host {
+      display: block;
+      overflow:hidden;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
+    }
+
+    table {
+      word-wrap:break-word;
+    }
+
+    td:first-of-type {
+      min-width: 50px;
+    }
+
+  </style>
+  <template>
+    <table>
+      <tr>
+        <td class="paper-font-body1">{{time}}</td>
+        <td>
+          <a href="{{getYoutubeLink(artist, song)}}" target="_blank" class="paper-font-title">{{song}}</a>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>{{artist}}</td>
+      </tr>
+    </table>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+      Polymer({ // jshint ignore:line
+        is: 'my-track',
+
+        properties: {
+          time: {
+            type: String,
+            value: ''
+          },
+          song: {
+            type: String,
+            value: ''
+          },
+          artist: {
+            type: String,
+            value: ''
+          }
+        },
+        getYoutubeLink: function(artist, song){
+          return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(artist + ' - ' + song).replace(/%20/g, '+');
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

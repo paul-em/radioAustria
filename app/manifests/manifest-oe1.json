@@ -1,0 +1,50 @@
+{
+  "name": "Radio Österreich 1",
+  "short_name": "oe1",
+  "author": "Paul Em",
+  "description": "radio livestream player",
+  "version": "2.8",
+  "manifest_version": 2,
+  "icons": {
+    "16": "images/logos/oe1-16.png",
+    "128": "images/logos/oe1-128-round.png"
+  },
+  "app": {
+    "background": {
+      "scripts": [
+        "scripts/background.js"
+      ]
+    },
+    "streamurl": "http://mp3stream3.apasf.apa.at:8000/;",
+    "streamtype'": "audio/mpeg",
+    "tracklist": "http://hop.orf.at/img-trackservice/oe1.js",
+    "curProgram": "http://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-oe1.xml",
+    "website": "http://oe1.orf.at/",
+    "color": "#B70E0B"
+  },
+  "commands": {
+    "playPauseMusic": {
+      "suggested_key": {
+        "default": "MediaPlayPause"
+      },
+      "description": "Play and Pause the radio",
+      "global": true
+    },
+    "stopMusic": {
+      "suggested_key": {
+        "default": "MediaStop"
+      },
+      "description": "Stop the radio",
+      "global": true
+    }
+  },
+  "permissions": [
+    "storage",
+    "notifications",
+    "alwaysOnTopWindows",
+    "http://hop.orf.at/img-trackservice/oe1.js",
+    "http://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp",
+    "http://mp3stream3.apasf.apa.at:8000/"
+  ],
+  "offline_enabled": false
+}

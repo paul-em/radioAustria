@@ -1,0 +1,50 @@
+{
+  "name": "Radio Salzburg",
+  "short_name": "sbg",
+  "author": "Paul Em",
+  "description": "radio livestream player",
+  "version": "2.8",
+  "manifest_version": 2,
+  "icons": {
+    "16": "images/logos/sbg-16.png",
+    "128": "images/logos/sbg-128-round.png"
+  },
+  "app": {
+    "background": {
+      "scripts": [
+        "scripts/background.js"
+      ]
+    },
+    "streamurl": "http://194.232.200.147:8000/;",
+    "streamtype'": "audio/mpeg",
+    "tracklist": "http://hop.orf.at/img-trackservice/sbg.js",
+    "curProgram": "http://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-sbg.xml",
+    "website": "http://salzburg.orf.at/radio/",
+    "color": "#D70010"
+  },
+  "commands": {
+    "playPauseMusic": {
+      "suggested_key": {
+        "default": "MediaPlayPause"
+      },
+      "description": "Play and Pause the radio",
+      "global": true
+    },
+    "stopMusic": {
+      "suggested_key": {
+        "default": "MediaStop"
+      },
+      "description": "Stop the radio",
+      "global": true
+    }
+  },
+  "permissions": [
+    "storage",
+    "notifications",
+    "alwaysOnTopWindows",
+    "http://hop.orf.at/img-trackservice/sbg.js",
+    "http://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp",
+    "http://194.232.200.145:8000/"
+  ],
+  "offline_enabled": false
+}

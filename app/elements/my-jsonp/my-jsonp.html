@@ -1,0 +1,97 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="my-jsonp">
+  <script>
+    (function () {
+      'use strict';
+      var head = document.getElementsByTagName('head')[0];
+
+      function load(url, pfnError) {
+        var script = document.createElement('script'),
+          done = false;
+        script.src = url;
+        script.async = true;
+
+        var errorHandler = pfnError;
+        if (typeof errorHandler === 'function') {
+          script.onerror = function (ex) {
+            errorHandler({url: url, event: ex});
+          };
+        }
+
+        script.onload = script.onreadystatechange = function () {
+          if (!done && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete')) {
+            done = true;
+            script.onload = script.onreadystatechange = null;
+            if (script && script.parentNode) {
+              script.parentNode.removeChild(script);
+            }
+          }
+        };
+
+        if (!head) {
+          head = document.getElementsByTagName('head')[0];
+        }
+        head.appendChild(script);
+      }
+
+      function encode(str) {
+        return encodeURIComponent(str);
+      }
+
+      function jsonp(url, data, fn, callback, errCallback) {
+        callback = callback || function(){};
+        errCallback = errCallback || function(){};
+        data = data || {};
+        data.t = new Date().getTime();
+        var query = (url || '').indexOf('?') === -1 ? '?' : '&';
+        for (var key in data) {
+          if (data.hasOwnProperty(key)) {
+            query += encode(key) + '=' + encode(data[key]) + '&';
+          }
+        }
+
+        window[fn] = function (data) {
+          callback(data);
+          try {
+            window[fn] = null;
+            delete window[fn];
+          } catch (e) {
+          }
+        };
+
+        load(url + query, errCallback);
+      }
+
+      Polymer({ // jshint ignore:line
+        is: 'my-jsonp',
+        properties: {
+          url: {
+            type: String
+          },
+          fn: {
+            type: String
+          },
+          data: {
+            type: Object,
+            value: {}
+          }
+        },
+        generateRequest: function () {
+          var self = this;
+          jsonp(this.url, this.data, this.fn, function (response) {
+            self.fire('response', response);
+          });
+        }
+      });
+    })();
+  </script>
+</dom-module>

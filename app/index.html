@@ -1,0 +1,193 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!doctype html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Polymer Starter Kit"/>
+  <title>Radio Player</title>
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <link rel="icon" type="image/png" href="images/logos/fm4-16.png">
+  <!-- Chrome for Android theme color -->
+  <meta name="theme-color" content="#F1BD15"><!--color-->
+
+  <!-- Web Application Manifest -->
+  <link rel="manifest" href="manifest.web.json">
+
+  <!-- Tile color for Win8 -->
+  <meta name="msapplication-TileColor" content="#F1BD15"><!--color-->
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Polymer Starter Kit">
+  <link rel="icon" sizes="192x192" href="images/logos/fm4-192.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#F1BD15"><!--color-->
+  <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+  <link rel="apple-touch-icon" href="images/logos/fm4-152.png">
+
+  <!-- Tile icon for Win8 (144x144) -->
+  <meta name="msapplication-TileImage" content="images/logos/fm4-144.png">
+
+  <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- endbuild -->
+
+  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endreplace-->
+</head>
+
+<body unresolved class="fullbleed layout vertical fm4">
+<span id="browser-sync-binding"></span>
+<template is="dom-bind" id="app">
+
+  <paper-drawer-panel id="paperDrawerPanel">
+    <div drawer>
+
+      <!-- Drawer Toolbar -->
+      <paper-toolbar id="drawerToolbar">
+          <img id="menu-logo" src="" class="bottom"/>
+      </paper-toolbar>
+
+      <!-- Drawer Content -->
+      <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
+        <a data-route="home" href="/">
+          <iron-icon icon="home"></iron-icon>
+          <span>Home</span>
+        </a>
+
+        <a data-route="stations" href="/stations">
+          <iron-icon icon="settings-input-antenna"></iron-icon>
+          <span>Sender</span>
+        </a>
+
+        <a data-route="settings" href="/settings">
+          <iron-icon icon="settings"></iron-icon>
+          <span>Einstellungen</span>
+        </a>
+
+        <a data-route="info" href="/info">
+          <iron-icon icon="info"></iron-icon>
+          <span>Info</span>
+        </a>
+      </paper-menu>
+    </div>
+    <paper-header-panel main mode="waterfall-tall">
+
+      <!-- Main Toolbar -->
+      <paper-toolbar id="mainToolbar">
+        <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+        <span class="flex"></span>
+
+        <!-- Toolbar icons -->
+        <a class="station-link station-toolbar-link" target="_blank">
+          <paper-icon-button icon="link"></paper-icon-button>
+        </a>
+
+        <!-- Application name -->
+        <div id="station-name" class="middle paper-font-display2 app-name"></div>
+
+        <!-- Application sub title -->
+        <div id="station-program" class="bottom title"></div>
+
+        <my-volume-control id="volume-control" class="bottom"></my-volume-control>
+        <my-play-button id="play-button" class="bottom"></my-play-button>
+      </paper-toolbar>
+
+      <!-- Main Content -->
+      <div class="content">
+        <iron-pages attr-for-selected="data-route" selected="{{route}}">
+
+          <section data-route="home">
+            <my-track-list id="track-list"></my-track-list>
+          </section>
+
+          <section data-route="settings">
+            <my-settings id="settings"></my-settings>
+          </section>
+
+          <section data-route="info">
+            <paper-material elevation="1">
+              <h2 class="paper-font-display2">Info</h2>
+
+              <p>Developer: Paul Em</p>
+
+              <p>Contact: <a href="mailto:info@paulem.eu">info@paulem.eu</a></p>
+
+              <p>Version: <span id="version"></span></p>
+
+              <h3 class="paper-font-display1">Legal Info</h3>
+
+              <p>Dieses Programm ist kein offizielles Programm vom ORF und in keiner Weise gef&ouml;rdert vom ORF. Alle
+                Services zu dieser Radio Station k&ouml;nnen unter dieser <a class="station-link" target="_blank">Website</a> gefunden werden.</p>
+
+              <p>This application is not an official application by the ORF and it is not affiliated or sponsored by the
+                ORF. You
+                can access all services for free on the official <a class="station-link" target="_blank">website</a>.</p>
+
+            </paper-material>
+          </section>
+
+          <section data-route="stations">
+            <paper-material elevation="1">
+              <my-station-list id="station-list"></my-station-list>
+            </paper-material>
+          </section>
+        </iron-pages>
+      </div>
+    </paper-header-panel>
+  </paper-drawer-panel>
+
+  <!--
+    <paper-toast id="caching-complete"
+                 duration="6000"
+                 text="Caching complete! This app will work offline.">
+    </paper-toast>
+
+
+    <platinum-sw-register auto-register
+                          clients-claim
+                          skip-waiting
+                          on-service-worker-installed="displayInstalledToast">
+      <platinum-sw-cache default-cache-strategy="networkFirst"
+                         precache-file="precache.json">
+      </platinum-sw-cache>
+    </platinum-sw-register>
+  -->
+
+  <my-notification id="song-notification"></my-notification>
+  <my-notification id="program-notification"></my-notification>
+
+  <iron-ajax
+    id="ajax-manifest"
+    auto
+    url="manifest.json"
+    handle-as="json"></iron-ajax>
+
+  <my-track-loader id="track-loader"></my-track-loader>
+  <my-program-loader id="program-loader"></my-program-loader>
+</template>
+
+
+<!-- build:js scripts/app.js -->
+<script src="bower_components/page/page.js"></script>
+<script src="bower_components/jsonp/jsonp.js"></script>
+<script src="scripts/app.js"></script>
+<!-- endbuild-->
+</body>
+
+</html>

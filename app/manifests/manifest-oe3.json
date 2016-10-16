@@ -1,0 +1,50 @@
+{
+  "name": "hitradio Ö3",
+  "short_name": "oe3",
+  "author": "Paul Em",
+  "description": "radio livestream player",
+  "version": "2.8",
+  "manifest_version": 2,
+  "icons": {
+    "16": "images/logos/oe3-16.png",
+    "128": "images/logos/oe3-128-round.png"
+  },
+  "app": {
+    "background": {
+      "scripts": [
+        "scripts/background.js"
+      ]
+    },
+    "streamurl": "http://mp3stream7.apasf.apa.at:8000/;",
+    "streamtype'": "audio/mpeg",
+    "tracklist": "http://oe3meta.orf.at/oe3mdata/WebPlayerFiles/PlayList400.json",
+    "curProgram": "http://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp?scheme=sendungsplan-oe3.xml",
+    "website": "http://oe3.orf.at/",
+    "color": "#D80926"
+  },
+  "commands": {
+    "playPauseMusic": {
+      "suggested_key": {
+        "default": "MediaPlayPause"
+      },
+      "description": "Play and Pause the radio",
+      "global": true
+    },
+    "stopMusic": {
+      "suggested_key": {
+        "default": "MediaStop"
+      },
+      "description": "Stop the radio",
+      "global": true
+    }
+  },
+  "permissions": [
+    "storage",
+    "notifications",
+    "alwaysOnTopWindows",
+    "http://hop.orf.at/img-trackservice/oe3.js",
+    "http://tube.orf.at/broadcastSchedule/currentBroadcast.jsonp",
+    "http://mp3stream7.apasf.apa.at:8000/"
+  ],
+  "offline_enabled": false
+}

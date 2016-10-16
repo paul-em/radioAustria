@@ -1,0 +1,19 @@
+{
+  "name": "radio FM4",
+  "short_name": "fm4",
+  "icons": [{
+        "src": "images/logos/fm4-128.png",
+        "sizes": "128x128"
+      }, {
+        "src": "images/logos/fm4-152.png",
+        "sizes": "152x152"
+      }, {
+        "src": "images/logos/fm4-144.png",
+        "sizes": "144x144"
+      }, {
+        "src": "images/logos/fm4-192.png",
+        "sizes": "192x192"
+      }],
+  "start_url": "/#!/",
+  "display": "standalone"
+}

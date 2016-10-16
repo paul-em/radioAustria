@@ -1,0 +1,74 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="my-storage">
+  <style>
+
+  </style>
+  <template>
+
+  </template>
+  <script>
+    (function () {
+      'use strict';
+      var storage;
+
+      Polymer({ // jshint ignore:line
+        is: 'my-storage',
+
+        getItem: function (key) {
+          return storage.getItem(key);
+        },
+        setItem: function (key, val) {
+          return storage.setItem(key, val);
+        },
+        ready: function () {
+          if (window.chrome && window.chrome.storage) {
+            storage = {
+              getItem: function (key) {
+                return new Promise(function (resolve) {
+                  window.chrome.storage.sync.get(key, function (data) {
+                    resolve(data[key]);
+                  });
+                });
+              },
+              setItem: function (key, val) {
+                return new Promise(function (resolve) {
+                  var data = {};
+                  data[key] = val;
+                  window.chrome.storage.sync.set(data);
+                  resolve(val);
+                });
+              }
+            };
+          } else if ('localStorage' in window) {
+            storage = {
+              getItem: function (key) {
+                return new Promise(function (resolve, reject) {
+                  var data = window.localStorage.getItem(key);
+                  if (!data) {
+                    reject('not found');
+                  }
+                  resolve(JSON.parse(data));
+                });
+              },
+              setItem: function (key, val) {
+                return new Promise(function (resolve) {
+                  window.localStorage.setItem(key, JSON.stringify(val));
+                  resolve(val);
+                });
+              }
+            };
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -1,0 +1,192 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="my-track-loader">
+  <template>
+    <my-jsonp
+      id="jsonp"
+      url="{{url}}"
+      fn="renderTracklist"
+      on-response="_handleResponse">
+    </my-jsonp>
+    <iron-ajax
+      id="ajax"
+      url="{{url}}"
+      on-response="_handleAjaxResponse">
+    </iron-ajax>
+    <iron-ajax
+      id="ajaxFallback"
+      url="{{url}}"
+      handle-as="text"
+      on-response="_handleAjaxFallbackResponse">
+    </iron-ajax>
+  </template>
+  <script>
+
+    (function () {
+      'use strict';
+      var self, prevHtml, trackList;
+
+      function replaceSpecialEntities(text) {
+        return text.replace(/&amp;/g, '&')
+          .replace(/\\'/g, '\'')
+          .replace(/&quot;/g, '"')
+          .replace(/\\"/g, '"')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&ndash;/g, '-')
+          .replace(/&mdash;/g, '-')
+          .replace(/&lsquo;/g, '‘')
+          .replace(/&rsquo;/g, '’')
+          .replace(/&Ouml;/g, 'Ö')
+          .replace(/&ouml;/g, 'ö')
+          .replace(/&Uuml;/g, 'Ü')
+          .replace(/&uuml;/g, 'ü')
+          .replace(/&Auml;/g, 'Ä')
+          .replace(/&auml;/g, 'ä');
+      }
+
+      function update(response, type) {
+        var compare = response;
+        var isJson = false;
+        if (typeof response === 'object') {
+          compare = JSON.stringify(response);
+          isJson = true;
+        }
+        if (compare !== prevHtml) {
+          prevHtml = compare;
+          var results = [];
+
+          if (isJson) {
+            response.some(function (track) {
+              var date = new Date(track.Time);
+              var min = date.getMinutes();
+              results.push({
+                song: track.SongName,
+                time: date.getHours() + ':' + (min < 10 ? '0' + min : min),
+                artist: track.Artist
+              });
+              return track.Status !== 'Played';
+            });
+            results.reverse();
+          } else if (type === 'ajaxFallback') {
+            var times = response.match(/(class=\\"tracktime\\">).{5}(<\/span>)/g);
+            if (times) {
+              times.forEach(function (time) {
+                results.push({time: time.substr(20, 5)});
+              });
+            }
+            var songs = response.match(/(class=\\"tracktitle\\">).*?(<\/span>)/g);
+            if (songs) {
+              songs.forEach(function (song, index) {
+                if (!results[index]) {
+                  results[index] = {};
+                }
+                results[index].song = replaceSpecialEntities(song.substring(21, song.length - 7)).trim();
+              });
+            }
+            var artists = response.match(/(class=\\"artist\\">).*?(<\/span>)/g);
+            if (artists) {
+              artists.forEach(function (artist, index) {
+                if (!results[index]) {
+                  results[index] = {};
+                }
+                results[index].artist = replaceSpecialEntities(artist.substring(17, artist.length - 7)).trim();
+              });
+            }
+          } else {
+            var ul = document.createElement('ul');
+            ul.innerHTML = response;
+            var items = ul.querySelectorAll('li');
+
+            for (var i = 0; i < items.length; i++) {
+              var $time = items[i].querySelector('.tracktime');
+              var $song = items[i].querySelector('.tracktitle');
+              var $artist = items[i].querySelector('.artist');
+              results.push({
+                time: $time ? $time.innerText : '',
+                song: $song ? $song.innerText : '',
+                artist: $artist ? $artist.innerText : ''
+              });
+            }
+          }
+          // extend previous tracklist
+          if (!trackList) {
+            trackList = results;
+          } else {
+            var newTrackList = results;
+            var last = newTrackList[newTrackList.length - 1];
+            var found = false;
+            trackList.forEach(function (track) {
+              if (track && (found || track.time === last.time && track.song === last.song && track.artist === last.artist)) {
+                found = true;
+                newTrackList.push(track);
+              }
+            });
+            trackList = newTrackList;
+          }
+          if (trackList.length === 0) {
+            self.fire('update', [{artist: 'Zur Zeit kein Trackservice verfügbar'}]);
+          } else {
+            self.fire('update', trackList);
+          }
+        }
+      }
+
+      setInterval(function () {
+        generateRequest();
+      }, 15 * 1000);
+
+      function generateRequest() {
+        if (self.url.indexOf('oe3') !== -1) {
+          self.$.ajax.generateRequest();
+        } else {
+          if (window.chrome && window.chrome.app && window.chrome.app.window) {
+            self.$.ajaxFallback.generateRequest();
+          } else {
+            self.$.jsonp.generateRequest();
+          }
+        }
+      }
+
+      Polymer({ // jshint ignore:line
+        is: 'my-track-loader',
+        properties: {
+          url: {
+            type: String,
+            observer: '_urlChange'
+          }
+        },
+        _urlChange: function () {
+          trackList = null;
+          generateRequest();
+        },
+        _handleAjaxResponse: function (e) {
+          var response = e.detail.response;
+          update(response, 'ajax');
+        },
+        _handleAjaxFallbackResponse: function (e) {
+          var response = e.detail.response;
+          update(response, 'ajaxFallback');
+        },
+        _handleResponse: function (e) {
+          var response = e.detail;
+          if (response) {
+            update(response, 'jsonp');
+          }
+        },
+        ready: function () {
+          self = this;
+        }
+      });
+    })
+    ();
+  </script>
+</dom-module>
