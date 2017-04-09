@@ -7,6 +7,7 @@ var del = require('del');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
+var electron = require('electron-connect').server.create();
 var merge = require('merge-stream');
 var path = require('path');
 var fs = require('fs');
@@ -239,6 +240,33 @@ gulp.task('default', ['clean'], function (cb) {
     cb);
 });
 
+//Start with watching Electron
+gulp.task('electron', ['default'], function () {
+  electron.start();
+
+  gulp.watch('main.js', electron.restart);
+  gulp.watch(['app/**/*.html'], electron.restart);
+  gulp.watch(['app/styles/**/*.css'], ['styles', electron.restart]);
+  gulp.watch(['app/elements/**/*.css'], ['elements', electron.restart]);
+  gulp.watch(['app/{scripts,elements}/**/*.js'], electron.restart);
+  gulp.watch(['app/images/**/*'], electron.restart);
+});
+
+gulp.task('serve2', function () {
+
+  // Start browser process
+  electron.start();
+
+  // Restart browser process
+  gulp.watch('app.js', electron.restart);
+
+  // Reload renderer process
+  gulp.watch(['app/**/*.html'], electron.reload);
+  gulp.watch(['app/styles/**/*.css'], ['styles', electron.reload]);
+  gulp.watch(['app/elements/**/*.css'], ['elements', electron.reload]);
+  gulp.watch(['app/{scripts,elements}/**/*.js'], ['jshint']);
+  gulp.watch(['app/images/**/*'], electron.reload);
+});
 
 gulp.task('pack', ['default'], function (done) {
   fs.readdir('./dist/manifests/', function (err, data) {

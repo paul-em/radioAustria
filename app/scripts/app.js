@@ -19,6 +19,9 @@
     document.querySelector('#caching-complete').show();
   };
 
+  // We have to test, whether the site is running in Electron or not, as the imports work elsehow if hosted on a website.
+  var isInElectron = window && window.process && window.process.type;
+
   // Listen for template bound event to know when bindings
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function () {
@@ -43,7 +46,8 @@
 
     $ajaxManifest.addEventListener('error', function (e) {
       console.error('ajaxManifest error', e);
-      $ajaxManifest.url = __dirname + '/manifests/manifest.json';
+      if (isInElectron) $ajaxManifest.url = __dirname + '/manifests/manifest.json'; // jshint ignore:line
+      else $ajaxManifest.url = './manifests/manifest.json'; // jshint ignore:line
     });
     $ajaxManifest.addEventListener('response', function (e) {
       manifest = e.detail.response;
@@ -56,9 +60,16 @@
       $stationList.selected = manifest.short_name; // jshint ignore:line
       $stationName.textContent = manifest.name;
       $version.textContent = manifest.version;
-      $menuLogo.src = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-      $programNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-      $songNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+
+      if (isInElectron) {
+        $menuLogo.src = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+        $programNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+        $songNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+      } else {
+        $menuLogo.src = './images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+        $programNotification.icon = './images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+        $songNotification.icon = './images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+      }
 
       for (var i = 0; i < $stationLink.length; i++) {
         $stationLink[i].href = manifest.app.website;
@@ -66,15 +77,18 @@
 
       var link = document.createElement('link');
       link.rel = 'import';
-      link.href = __dirname + '/styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
-      //link.href = '../styles/oe3.html';
+      if (isInElectron) link.href = __dirname + '/styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
+      else link.href = './styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
       document.head.appendChild(link);
+
       link = document.createElement('link');
       link.rel = 'import';
-      link.href = __dirname + '/styles/applyTheme.html?t=' + Math.random();
+      if (isInElectron) link.href = __dirname + '/styles/applyTheme.html?t=' + Math.random(); // jshint ignore:line
+      else link.href = './styles/applyTheme.html?t=' + Math.random(); // jshint ignore:line
       document.head.appendChild(link);
+
       document.title = manifest.name;
-      document.querySelector('link[rel=icon]').href = 'images/logos/' + manifest.short_name + '-16.png'; // jshint ignore:line
+      document.querySelector('link[rel=icon]').href = './images/logos/' + manifest.short_name + '-16.png'; // jshint ignore:line
       document.querySelector('meta[name="theme-color"]').content = manifest.app.color;
       document.querySelector('meta[name="msapplication-TileColor"]').content = manifest.app.color;
       document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content = manifest.app.color;
@@ -106,17 +120,19 @@
       $playButton.volume = e.detail;
     });
     $stationList.addEventListener('update', function (e) {
-      $ajaxManifest.url = __dirname + '/manifests/manifest-' + e.detail + '.json';
+      if (isInElectron) $ajaxManifest.url = __dirname + '/manifests/manifest-' + e.detail + '.json'; // jshint ignore:line
+      else $ajaxManifest.url = './manifests/manifest-' + e.detail + '.json'; // jshint ignore:line
     });
     if (document.location.search.indexOf('station') !== -1) {
-      $ajaxManifest.url = __dirname + '/manifests/manifest-' + document.location.search.substr(-3) + '.json';
+      if (isInElectron) $ajaxManifest.url = __dirname + '/manifests/manifest-' + document.location.search.substr(-3) + '.json'; // jshint ignore:line
+      else $ajaxManifest.url = './manifests/manifest-' + document.location.search.substr(-3) + '.json'; // jshint ignore:line
     }
     $settings.addEventListener('update', function (e) {
       $programNotification.enabled = e.detail.programNotify;
       $songNotification.enabled = e.detail.songNotify;
-      if (window.chrome && window.chrome.app && window.chrome.app.window) {
-        var currentWindow = (window.chrome.app.window && window.chrome.app.window.current());
-        currentWindow.setAlwaysOnTop(!!e.detail.foreground);
+      if (!!(window && window.process && window.process.type)) {
+        var ipcRenderer = require('electron').ipcRenderer;
+        ipcRenderer.sendSync('foreground', !!e.detail.foreground);
       }
     });
 
@@ -166,7 +182,7 @@
       hashbang: true
     });
 
-    page.show('/');
+    if (isInElectron) page.show('/'); // jshint ignore:line
 
   });
 

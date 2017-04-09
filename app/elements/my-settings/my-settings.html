@@ -70,7 +70,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         ready: function () {
           var self = this;
-          if (window.chrome && window.chrome.app && window.chrome.app.window) {
+
+          if (window && window.process && window.process.type) {
             this.foregroundDisabled = false;
           }
 
@@ -88,7 +89,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               } else {
                 self.songNotify = true;
                 self.programNotify = true;
-                self.foreground = !!(window.chrome && window.chrome.app && window.chrome.app.window);
+                self.foreground = !!(window && window.process && window.process.type);
               }
 
               self.fire('update', {
@@ -100,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .catch(function(){
               self.songNotify = true;
               self.programNotify = true;
-              self.foreground = (window.chrome && window.chrome.app && window.chrome.app.window);
+              self.foreground = !!(window && window.process && window.process.type);
 
               self.fire('update', {
                 songNotify: self.songNotify,

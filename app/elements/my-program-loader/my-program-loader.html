@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         generateRequest();
       }, 60 * 1000);
 
-      function generateRequest() {
+      function generateRequest() { // jshint ignore:line
         if (window.chrome && window.chrome.app && window.chrome.app.window) {
           self.$.ajaxFallback.generateRequest();
         } else {

@@ -144,7 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         generateRequest();
       }, 15 * 1000);
 
-      function generateRequest() {
+      function generateRequest() { // jshint ignore:line
         if (self.url.indexOf('oe3') !== -1) {
           self.$.ajax.generateRequest();
         } else {
