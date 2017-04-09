@@ -19,7 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   </style>
   <template>
-    <paper-slider value="{{volume}}" max="100" on-value-change="_valueChange"></paper-slider>
+    <paper-slider value="{{volume}}" max="100" on-click="_valueChange" on-mousedown="_hoverEvent"></paper-slider>
   </template>
   <script>
     (function () {
@@ -35,6 +35,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         _valueChange: function () {
           this.fire('update', this.volume);
+        },
+        _hoverEvent: function () {
+          var self = this;
+          document.addEventListener('mousemove', function () {
+            self.fire('update', document.querySelector('#sliderBar').value);
+          });
         },
         ready: function () {
           self = this;
