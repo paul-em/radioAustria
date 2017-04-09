@@ -1,14 +1,22 @@
 {
+  "name": "RadioAustria",
   "private": true,
   "main": "main.js",
   "scripts": {
-    "start": "gulp electron"
+    "start": "gulp electron",
+    "build": "electron-packager . RadioAustria --all --out build/",
+    "deb64": "electron-installer-debian --src build/RadioAustria-linux-x64 --arch amd64 --config deb-parameters.json"
   },
   "devDependencies": {
     "browser-sync": "^2.7.7",
     "del": "^2.0.2",
-    "electron": "^1.4.3",
+    "electron": "^1.4.16",
     "electron-connect": "^0.6.1",
+    "electron-installer-debian": "^0.5.1",
+    "electron-installer-dmg": "^0.2.1",
+    "electron-installer-windows": "^0.2.0",
+    "electron-packager": "^8.4.0",
+    "electron-rebuild": "^1.4.7",
     "glob": "^5.0.6",
     "gulp": "^3.8.5",
     "gulp-autoprefixer": "^3.1.0",

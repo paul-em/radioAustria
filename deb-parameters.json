@@ -1,0 +1,10 @@
+{
+  "dest": "build/installers/",
+  "icon": "app/images/logos/fm4-64.png",
+  "categories": [
+    "Network"
+  ],
+  "lintianOverrides": [
+    "changelog-file-missing-in-native-package"
+  ]
+}
