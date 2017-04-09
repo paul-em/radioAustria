@@ -32,4 +32,9 @@ app.on('ready', function() {
     mainWindow.setAlwaysOnTop(arg);
     e.returnValue = arg;
   });
+
+  ipcMain.on('stationChange', (e, arg) => {
+    mainWindow.setIcon(__dirname + '/dist/images/logos/' + arg + '-16.png');
+    e.returnValue = arg;
+  });
 });

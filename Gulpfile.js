@@ -245,11 +245,11 @@ gulp.task('electron', ['default'], function () {
   electron.start();
 
   gulp.watch('main.js', electron.restart);
-  gulp.watch(['app/**/*.html'], electron.restart);
+  gulp.watch(['app/**/*.html'], ['default', electron.restart]);
   gulp.watch(['app/styles/**/*.css'], ['styles', electron.restart]);
   gulp.watch(['app/elements/**/*.css'], ['elements', electron.restart]);
-  gulp.watch(['app/{scripts,elements}/**/*.js'], electron.restart);
-  gulp.watch(['app/images/**/*'], electron.restart);
+  gulp.watch(['app/{scripts,elements}/**/*.js'], ['default', electron.restart]);
+  gulp.watch(['app/images/**/*'], ['default', electron.restart]);
 });
 
 gulp.task('serve2', function () {

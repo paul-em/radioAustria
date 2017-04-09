@@ -93,6 +93,10 @@
       document.querySelector('meta[name="msapplication-TileColor"]').content = manifest.app.color;
       document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content = manifest.app.color;
 
+      if (!!(window && window.process && window.process.type)) {
+        var ipcRenderer = require('electron').ipcRenderer;
+        ipcRenderer.sendSync('stationChange', manifest.short_name);
+      }
     });
 
     $trackLoader.addEventListener('update', function (e) {

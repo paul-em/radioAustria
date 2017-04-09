@@ -51,6 +51,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background: #fafafa;
     font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #333;
+    user-select: none;
+    cursor: default;
   }
 
 
@@ -66,9 +68,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background: var(--drawer-menu-color) url('../images/paulem.png') no-repeat center;
     background-size: 100px;
   }
+
   paper-drawer-panel /deep/ paper-toolbar.paper-toolbar-0 {
     transition: background-color .5s;
   }
+
+  paper-header-panel.paper-header-panel-0 {
+    z-index: 0;
+  }
+
   #menu-logo {
     width: 84px;
     margin-bottom: 70px;
@@ -84,14 +92,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     position: absolute;
     left: 0;
     bottom: -19px;
-    z-index: 5;
+    z-index: 1;
   }
 
   my-play-button {
     position: absolute;
     bottom: -30px;
     right: 60px;
-    z-index: 5;
+    z-index: 1;
   }
 
   paper-material, my-track-list /deep/ paper-material, my-settings /deep/ paper-material {
