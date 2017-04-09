@@ -51,9 +51,8 @@
     });
     $ajaxManifest.addEventListener('response', function (e) {
       manifest = e.detail.response;
-      if (!manifest) {
-        throw new Error('no manifest found');
-      }
+      if (!manifest) { return; }
+
       $trackLoader.url = manifest.app.tracklist;
       $programLoader.url = manifest.app.curProgram;
       $playButton.url = manifest.app.streamurl;
@@ -95,7 +94,7 @@
 
       if (!!(window && window.process && window.process.type)) {
         var ipcRenderer = require('electron').ipcRenderer;
-        ipcRenderer.sendSync('stationChange', manifest.short_name);
+        ipcRenderer.sendSync('stationChange', manifest.short_name); // jshint ignore:line
       }
     });
 

@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-radio-button name="{{item.short_name}}">{{item.name}}</paper-radio-button>
       </template>
     </paper-radio-group>
+    <my-storage id="storage"></my-storage>
   </template>
   <script>
     (function () {
@@ -52,7 +53,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         },
         _onChange: function(){
+          this.$.storage.setItem('station', this.selected);
           this.fire('update', this.selected);
+        },
+        ready: function () {
+          var self = this;
+
+          this.$.storage.getItem('station')
+            .then(function (station) {
+              if (station) {
+                self.station = station;
+              } else {
+                self.station = 'fm4';
+              }
+
+              self.fire('update', self.station);
+            })
+            .catch(function () {
+              self.fire('update', 'fm4');
+            });
         }
       });
     })();
