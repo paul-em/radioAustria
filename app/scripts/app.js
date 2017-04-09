@@ -43,7 +43,7 @@
 
     $ajaxManifest.addEventListener('error', function (e) {
       console.error('ajaxManifest error', e);
-      $ajaxManifest.url = '/manifests/manifest.json';
+      $ajaxManifest.url = __dirname + '/manifests/manifest.json';
     });
     $ajaxManifest.addEventListener('response', function (e) {
       manifest = e.detail.response;
@@ -56,7 +56,7 @@
       $stationList.selected = manifest.short_name; // jshint ignore:line
       $stationName.textContent = manifest.name;
       $version.textContent = manifest.version;
-      $menuLogo.src = 'images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+      $menuLogo.src = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
       $programNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
       $songNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
 
@@ -66,12 +66,12 @@
 
       var link = document.createElement('link');
       link.rel = 'import';
-      link.href = './styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
+      link.href = __dirname + '/styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
       //link.href = '../styles/oe3.html';
       document.head.appendChild(link);
       link = document.createElement('link');
       link.rel = 'import';
-      link.href = './styles/applyTheme.html?t=' + Math.random();
+      link.href = __dirname + '/styles/applyTheme.html?t=' + Math.random();
       document.head.appendChild(link);
       document.title = manifest.name;
       document.querySelector('link[rel=icon]').href = 'images/logos/' + manifest.short_name + '-16.png'; // jshint ignore:line
@@ -106,10 +106,10 @@
       $playButton.volume = e.detail;
     });
     $stationList.addEventListener('update', function (e) {
-      $ajaxManifest.url = '/manifests/manifest-' + e.detail + '.json';
+      $ajaxManifest.url = __dirname + '/manifests/manifest-' + e.detail + '.json';
     });
     if (document.location.search.indexOf('station') !== -1) {
-      $ajaxManifest.url = '/manifests/manifest-' + document.location.search.substr(-3) + '.json';
+      $ajaxManifest.url = __dirname + '/manifests/manifest-' + document.location.search.substr(-3) + '.json';
     }
     $settings.addEventListener('update', function (e) {
       $programNotification.enabled = e.detail.programNotify;
