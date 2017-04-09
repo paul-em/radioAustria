@@ -10,7 +10,7 @@
 (function (document) {
   'use strict';
 
-  // Grab a reference to our auto-binding template
+  // Grab a reference to our auto-binding templateGorillaz just releas
   // and give it some initial binding values
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var manifest;
@@ -43,7 +43,7 @@
 
     $ajaxManifest.addEventListener('error', function (e) {
       console.error('ajaxManifest error', e);
-      $ajaxManifest.url = 'manifest.json';
+      $ajaxManifest.url = '/manifests/manifest.json';
     });
     $ajaxManifest.addEventListener('response', function (e) {
       manifest = e.detail.response;
@@ -57,8 +57,8 @@
       $stationName.textContent = manifest.name;
       $version.textContent = manifest.version;
       $menuLogo.src = 'images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-      $programNotification.icon = 'images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-      $songNotification.icon = 'images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+      $programNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+      $songNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
 
       for (var i = 0; i < $stationLink.length; i++) {
         $stationLink[i].href = manifest.app.website;
@@ -66,12 +66,12 @@
 
       var link = document.createElement('link');
       link.rel = 'import';
-      link.href = '../styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
+      link.href = './styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
       //link.href = '../styles/oe3.html';
       document.head.appendChild(link);
       link = document.createElement('link');
       link.rel = 'import';
-      link.href = '../styles/applyTheme.html?t=' + Math.random();
+      link.href = './styles/applyTheme.html?t=' + Math.random();
       document.head.appendChild(link);
       document.title = manifest.name;
       document.querySelector('link[rel=icon]').href = 'images/logos/' + manifest.short_name + '-16.png'; // jshint ignore:line
@@ -106,10 +106,10 @@
       $playButton.volume = e.detail;
     });
     $stationList.addEventListener('update', function (e) {
-      $ajaxManifest.url = 'manifests/manifest-' + e.detail + '.json';
+      $ajaxManifest.url = '/manifests/manifest-' + e.detail + '.json';
     });
     if (document.location.search.indexOf('station') !== -1) {
-      $ajaxManifest.url = 'manifests/manifest-' + document.location.search.substr(-3) + '.json';
+      $ajaxManifest.url = '/manifests/manifest-' + document.location.search.substr(-3) + '.json';
     }
     $settings.addEventListener('update', function (e) {
       $programNotification.enabled = e.detail.programNotify;
@@ -143,8 +143,6 @@
       } catch (e) {
         console.log('failed to overwrite window history');
       }
-
-
     }
 
     page('/', function () {
@@ -168,6 +166,7 @@
       hashbang: true
     });
 
+    page.show('/');
 
   });
 
