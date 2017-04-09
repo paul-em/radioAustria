@@ -8,7 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<dom-module id="my-track">
+<dom-module id="my-favourite-track">
   <style>
     :host {
       display: block;
@@ -32,14 +32,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <table>
       <tr>
-        <td class="paper-font-body1">{{time}}</td>
+        <td class="paper-font-body1"><paper-button on-click="_toggleFavourite"><iron-icon icon="star"></iron-icon></paper-button></td>
         <td>
-          <a href="{{getYoutubeLink(artist, song)}}" target="_blank" class="paper-font-title song">{{song}}</a>
+          <a href="{{getYoutubeLink(artist, song)}}" target="_blank" class="paper-font-title">{{song}}</a>
         </td>
       </tr>
       <tr>
-        <td><paper-button on-click="_toggleFavourite"><iron-icon icon="star-border"></iron-icon></paper-button></td>
-        <td class="artist">{{artist}}</td>
+        <td></td>
+        <td>{{artist}}</td>
       </tr>
     </table>
     <my-storage id="storage"></my-storage>
@@ -48,7 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     (function () {
       'use strict';
       Polymer({ // jshint ignore:line
-        is: 'my-track',
+        is: 'my-favourite-track',
 
         properties: {
           time: {
@@ -64,27 +64,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: ''
           }
         },
-        ready: function () {
-          var self = this;
-          var button = this.querySelector('iron-icon');
-
-          this.$.storage.getItem('favourites')
-            .then(function (favourites) {
-              if (favourites) {
-                for (var i in favourites) {
-                  if (favourites[i].song == self.song && favourites[i].artist == self.artist) {
-                    Polymer.dom(button).setAttribute('icon', 'star');
-                  }
-                }
-
-                document.querySelector('#favourites-list').tracks = favourites;
-              }
-            });
-        },
         _toggleFavourite: function () {
             var self = this;
             var button = this.querySelector('iron-icon');
             var $favouritesList = document.querySelector('#favourites-list');
+            var $trackList = document.querySelector('#track-list');
 
             this.$.storage.getItem('favourites')
               .then(function (favourites) {
@@ -92,34 +76,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   for (var i in favourites) {
                     if (favourites[i].song == self.song && favourites[i].artist == self.artist) {
                       favourites.splice(i, 1);
-                      Polymer.dom(button).setAttribute('icon', 'star-border');
                       self.$.storage.setItem('favourites', favourites);
                       $favouritesList.tracks = favourites;
+                      $trackList.favRefresh();
                       return;
                     }
                   }
                 }
-
-                favourites.push({
-                  song: self.song,
-                  artist: self.artist
-                });
-
-                Polymer.dom(button).setAttribute('icon', 'star');
-                self.$.storage.setItem('favourites', favourites);
-                $favouritesList.tracks = favourites;
               })
               .catch(function(){
                 var favourites = [];
-
-                favourites.push({
-                  song: self.song,
-                  artist: self.artist
-                });
-
-                Polymer.dom(button).setAttribute('icon', 'star');
                 self.$.storage.setItem('favourites', favourites);
-                $favouritesList.tracks = favourites;
+                $trackList.favRefresh();
               });
         },
         getYoutubeLink: function(artist, song){

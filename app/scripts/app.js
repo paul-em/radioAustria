@@ -107,6 +107,8 @@
           message: ($trackList.tracks[0].song || '') + ($trackList.tracks[0].artist ? ' - ' + $trackList.tracks[0].artist : '')
         });
       }
+      
+      $trackList.favRefresh();
     });
     $programLoader.addEventListener('update', function (e) {
       var response = e.detail;
@@ -138,8 +140,6 @@
         ipcRenderer.sendSync('foreground', !!e.detail.foreground);
       }
     });
-
-    //page.show('/');
   });
 
 
@@ -178,6 +178,10 @@
 
     page('/stations', function () {
       app.route = 'stations';
+    });
+
+    page('/favourites', function () {
+      app.route = 'favourites';
     });
 
     // add #! before urls

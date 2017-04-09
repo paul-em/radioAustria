@@ -70,6 +70,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <span>Home</span>
         </a>
 
+        <a data-route="favourites" href="/favourites">
+          <iron-icon icon="star"></iron-icon>
+          <span>Favoriten</span>
+        </a>
+
         <a data-route="stations" href="/stations">
           <iron-icon icon="settings-input-antenna"></iron-icon>
           <span>Sender</span>
@@ -116,6 +121,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <my-track-list id="track-list"></my-track-list>
           </section>
 
+          <section data-route="favourites">
+            <my-favourites-list id="favourites-list"></my-favourites-list>
+          </section>
+
+          <section data-route="stations">
+            <paper-material elevation="1">
+              <my-station-list id="station-list"></my-station-list>
+            </paper-material>
+          </section>
+
           <section data-route="settings">
             <my-settings id="settings"></my-settings>
           </section>
@@ -139,12 +154,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 ORF. You
                 can access all services for free on the official <a class="station-link" target="_blank">website</a>.</p>
 
-            </paper-material>
-          </section>
-
-          <section data-route="stations">
-            <paper-material elevation="1">
-              <my-station-list id="station-list"></my-station-list>
             </paper-material>
           </section>
         </iron-pages>

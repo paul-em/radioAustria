@@ -4,6 +4,7 @@
   "main": "main.js",
   "scripts": {
     "start": "gulp electron",
+    "electron": "electron ./",
     "build": "electron-packager . RadioAustria --all --out build/",
     "deb64": "electron-installer-debian --src build/RadioAustria-linux-x64 --arch amd64 --config deb-parameters.json"
   },

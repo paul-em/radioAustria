@@ -7,13 +7,13 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="import" href="../my-track/my-track.html">
+<link rel="import" href="../my-favourite-track/my-favourite-track.html">
 
-<dom-module id="my-track-list">
+<dom-module id="my-favourites-list">
   <template>
     <template is="dom-repeat" items="{{tracks}}">
       <paper-material elevation="1">
-        <my-track song="{{item.song}}" artist="{{item.artist}}" time="{{item.time}}"></my-track>
+        <my-favourite-track song="{{item.song}}" artist="{{item.artist}}" time="{{item.time}}"></my-favourite-track>
       </paper-material>
     </template>
   </template>
@@ -21,18 +21,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     (function () {
       'use strict';
       Polymer({ // jshint ignore:line
-        is: 'my-track-list',
+        is: 'my-favourites-list',
 
         properties: {
           tracks: {
             type: Object
           }
         },
-        favRefresh: function () {
-          var self = document.querySelector('#track-list');
-          var tracks = self.tracks;
-          self.tracks = null;
-          setTimeout(function () {self.tracks = tracks}, 100);
+        ready: function() {
+          /*this.favtracks = [
+              {"time":"","song":"Morgenjournal","artist":""},
+              {"time":"","song":"Danach","artist":""},
+              {"time":"","song":"Kultur aktuell","artist":""},
+              {"time":"","song":"Ö1 heute","artist":""},
+              {"time":"","song":"Guten Morgen Österreich","artist":""}
+          ];*/
         }
       });
     })();
