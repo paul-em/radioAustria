@@ -2,10 +2,12 @@
   "name": "RadioAustria",
   "private": true,
   "main": "main.js",
+  "description": "This is a radio player for austrian radio stations (Ö3, Fm4, Ö1, + 9 district radios)",
   "scripts": {
     "start": "gulp electron",
     "electron": "electron ./",
     "build": "electron-packager . RadioAustria --all --out build/",
+    "rebuild" : "electron-rebuild -f -w mpris-service",
     "deb64": "electron-installer-debian --src build/RadioAustria-linux-x64 --arch amd64 --config deb-parameters.json"
   },
   "devDependencies": {
@@ -50,6 +52,9 @@
     "vulcanize": ">= 1.4.2",
     "web-component-tester": "^3.4.0",
     "webshot": "^0.16.0"
+  },
+  "dependencies": {
+    "mpris-service": "^1.1.3"
   },
   "engines": {
     "node": ">=0.10.0"
