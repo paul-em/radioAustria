@@ -43,17 +43,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
 
-      if (window.chrome && window.chrome.commands) {
-        window.chrome.commands.onCommand.addListener(function (command) {
-          console.log('Command:', command);
-          switch (command) {
-            case 'playPauseMusic':
-              toggle();
-              break;
-            case 'stopMusic':
-              break;
-          }
-        });
+      function play() {
+        if (self.$.audio.paused) {
+          reload();
+          self.icon = 'av:pause';
+        }
+      }
+
+      function stop() {
+        if (!self.$.audio.paused) {
+          self.$.audio.pause();
+          self.icon = 'av:play-arrow';
+        }
       }
 
       Polymer({ // jshint ignore:line
@@ -101,6 +102,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               e.preventDefault();
             }
           }, false);
+
+          if (window && window.process && window.process.type) {
+            require('electron').remote.getCurrentWindow().on('app-command', function (e, cmd) {
+              if (cmd === 'media-play-pause') {
+                toggle();
+              } else if (cmd === 'media-play') {
+                play();
+              } else if (cmd === 'media-pause') {
+                stop();
+              } else if (cmd === 'media-stop') {
+                stop();
+              }
+            });
+          }
         }
       });
     })();
