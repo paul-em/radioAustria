@@ -107,7 +107,7 @@
           message: ($trackList.tracks[0].song || '') + ($trackList.tracks[0].artist ? ' - ' + $trackList.tracks[0].artist : '')
         });
       }
-      
+
       $trackList.favRefresh();
     });
     $programLoader.addEventListener('update', function (e) {
@@ -201,5 +201,25 @@
     }
   };
 
+  // Custom transformation: scale header's title
+  addEventListener('paper-header-transform', function(e) {
+    var panel = document.querySelector('paper-scroll-header-panel');
+    var title = document.querySelector('#station-name');
+    var botTitle = document.querySelector('.bottom.title');
+    var shadow = document.querySelector('#dropShadow');
+    var d = e.detail;
+    var m = d.height - d.condensedHeight;
+    var scale = Math.max(0.75, (m - d.y) / (m / 0.25)  + 0.75);
+    var pos = Math.min(1, d.y / m);
+    var op = Math.max(0, (m - d.y) / (m / 0.25) * 4);
+    console.log(m);
+    console.log(d.y);
+
+    Polymer.Base.transform('scale(' + scale + ')' + 'translate3d(' + (pos) * 50 + 'px,' + (pos) * ((m < 128) ? 151 : 174) + '%,0) perspective(1px)', title);
+    panel.setAttribute("condensed-header-height", ((m < 128) ? 56 : 64));
+    shadow.style.top = ((m < 128) ? 168 : 192) + 'px';
+    shadow.style.opacity = ((m === d.y) ? 1 : 0);
+    botTitle.style.opacity = op;
+  });
 
 })(document);

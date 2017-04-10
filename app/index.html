@@ -91,10 +91,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </a>
       </paper-menu>
     </div>
-    <paper-header-panel main mode="waterfall-tall">
+    <paper-scroll-header-panel main condenses keep-condensed-header header-height="192" condensed-header-height="64">
 
       <!-- Main Toolbar -->
-      <paper-toolbar id="mainToolbar">
+      <paper-toolbar id="mainToolbar" class="tall">
         <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
         <span class="flex"></span>
 
@@ -111,6 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <my-volume-control id="volume-control" class="bottom"></my-volume-control>
         <my-play-button id="play-button" class="bottom"></my-play-button>
+        <div id="dropShadow" class="bottom"></div>
       </paper-toolbar>
 
       <!-- Main Content -->

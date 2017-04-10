@@ -157,11 +157,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     transition: font-size .5s, margin-left .5s;
     font-size: 20px;
     padding-bottom: 0;
-    margin-left: 48px;
+    transform-origin: left center;
   }
 
   #mainToolbar.tall .bottom.title {
-    transition: opacity .2s .3s;
     opacity: 1;
   }
 
@@ -169,7 +168,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     opacity: 0;
     margin-left: 10px;
     margin-top: -40px;
-    transition: opacity .2s 0s;
+  }
+
+  /* Hacky way to put Drop-shadow onto the paper-scroll-header-panel */
+  #dropShadow {
+    transition: opacity 0.5s;
+    height: 6px;
+    box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: 168px;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    pointer-events: none;
   }
 
   /* Height of the scroll area */
