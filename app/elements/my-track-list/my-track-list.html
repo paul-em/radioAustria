@@ -32,6 +32,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var self = document.querySelector('#track-list');
           var tracks = self.tracks;
           self.tracks = null;
+          tracks = tracks.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
+
           setTimeout(function () {self.tracks = tracks}, 5);
         }
       });
