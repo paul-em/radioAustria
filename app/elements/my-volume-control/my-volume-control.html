@@ -50,11 +50,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               if(self.volume > 100){
                 self.volume = 100;
               }
+              self.fire('update', document.querySelector('#sliderBar').value);
             } else if (e.keyCode === 109 || e.keyCode === 189) {
               self.volume -= 10;
               if(self.volume < 0){
                 self.volume = 0;
               }
+              self.fire('update', document.querySelector('#sliderBar').value);
             }
           }, false);
         }
