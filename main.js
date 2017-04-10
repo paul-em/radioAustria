@@ -1,4 +1,5 @@
-const {app, BrowserWindow, ipcMain} = require('electron')
+const {app, BrowserWindow, ipcMain, shell} = require('electron');
+const url = require('url');
 const {client} = require('electron-connect');
 
 let mainWindow;
@@ -27,6 +28,15 @@ app.on('ready', function() {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+
+  mainWindow.webContents.on('new-window', function (e, uri) {
+    let protocol = url.parse(uri).protocol;
+
+    if (protocol === 'http:' || protocol === 'https:') {
+      e.preventDefault();
+      shell.openExternal(uri);
+    }
+  })
 
   ipcMain.on('foreground', (e, arg) => {
     mainWindow.setAlwaysOnTop(arg);
