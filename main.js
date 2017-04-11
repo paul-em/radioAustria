@@ -1,6 +1,5 @@
 const {app, BrowserWindow, ipcMain, shell} = require('electron');
 const url = require('url');
-const {client} = require('electron-connect');
 
 let mainWindow;
 
@@ -18,9 +17,8 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow({width: 1000, height: 800});
 
   mainWindow.loadURL('file://' + __dirname + '/dist/index.html');
-  mainWindow.webContents.openDevTools();
-  client.create(mainWindow);
-
+  try {require('./app/scripts/mpris').init(app, mainWindow);} catch (err) {}
+  try {require('electron-connect').client.create(mainWindow);} catch (err) {}
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
@@ -44,7 +42,7 @@ app.on('ready', function() {
   });
 
   ipcMain.on('stationChange', (e, arg) => {
-    mainWindow.setIcon(__dirname + '/dist/images/logos/' + arg + '-16.png');
+    mainWindow.setIcon(__dirname + '/dist/images/logos/' + arg + '-64.png');
     e.returnValue = arg;
   });
 });
