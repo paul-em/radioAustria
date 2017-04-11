@@ -106,6 +106,15 @@
           title: manifest.name, // jshint ignore:line
           message: ($trackList.tracks[0].song || '') + ($trackList.tracks[0].artist ? ' - ' + $trackList.tracks[0].artist : '')
         });
+        if (window && window.process && window.process.type) {
+          var media = {
+              artist: ($trackList.tracks[0].artist || ''),
+              song: $trackList.tracks[0].song,
+              artURL: __dirname + '/images/logos/' + manifest.short_name + '-512.png'
+          }, ipcRenderer = require('electron').ipcRenderer;
+
+          ipcRenderer.send('change:song', JSON.stringify(media)); // jshint ignore:line
+        }
       }
 
       $trackList.favRefresh();
