@@ -3,12 +3,18 @@
   "private": true,
   "main": "main.js",
   "description": "This is a radio player for austrian radio stations (Ö3, Fm4, Ö1, + 9 district radios)",
+  "author": "Paul Em <info@paulem.eu> (https://paulem.eu/)",
+  "version": "2.9.0",
   "scripts": {
     "start": "gulp electron",
     "electron": "electron ./",
-    "build": "electron-packager . RadioAustria --all --out build/",
-    "rebuild": "electron-rebuild -f -w mpris-service",
-    "deb64": "electron-installer-debian --src build/RadioAustria-linux-x64 --arch amd64 --config deb-parameters.json"
+    "build:win32": "electron-packager . RadioAustria --overwrite --platform=win32 --arch=ia32 --icon=app/images/logos/fm4.ico --prune=true --out=build/ --version-string.CompanyName=\"RadioAustria\" --version-string.FileDescription=\"A radio player for the austrian radio stations Ö3, Fm4, Ö1, + 9 district radios\" --version-string.ProductName=\"RadioAustria\"",
+    "build:linux": "electron-packager . RadioAustria --overwrite --platform=linux --arch=x64 --icon=app/images/logos/fm4-256.png --prune=true --out=build/",
+    "build:macOS": "electron-packager . RadioAustria --overwrite --platform=darwin --arch=x64 --icon=app/images/logos/fm4.icns --prune=true --out=build/",
+    "build": "npm run build:win32 && npm run build:linux && npm run build:macOS",
+    "inst:deb64": "electron-installer-debian --src build/RadioAustria-linux-x64 --arch amd64 --config build_tools/deb-parameters.json",
+    "inst:win32": "node build_tools/buildWin32.js",
+    "rebuild": "electron-rebuild -f -w mpris-service"
   },
   "devDependencies": {
     "browser-sync": "^2.7.7",
@@ -55,7 +61,7 @@
     "mpris-service": "^1.1.3",
     "electron-installer-debian": "^0.5.1",
     "electron-installer-dmg": "^0.2.1",
-    "electron-installer-windows": "^0.2.0"
+    "electron-winstaller": "^2.5.2"
   },
   "engines": {
     "node": ">=0.10.0"

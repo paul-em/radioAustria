@@ -1,3 +1,10 @@
+ // Handling squirrel setupevents before the process starts.
+ const setupEvents = require('./build_tools/setupEvents')
+ if (setupEvents.handleSquirrelEvent()) {
+    // squirrel event handled and app will exit in 1000ms, so don't do anything else
+    return;
+ }
+
 const {app, BrowserWindow, ipcMain, shell} = require('electron');
 const url = require('url');
 
