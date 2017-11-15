@@ -9,115 +9,124 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <dom-module id="my-play-button">
-  <style>
-    paper-fab {
-      background-color: var(--primary-background-color);
-      color: var(--default-primary-color);
-    }
-
-    audio {
-      display: none;
-    }
-  </style>
-  <template>
+    <style>
+        paper-fab {
+            background-color: var(--primary-background-color);
+            color: var(--default-primary-color);
+        }
+        
+        audio {
+            display: none;
+        }
+    </style>
+    <template>
     <audio id="audio" src="{{url}}" autoplay></audio>
     <paper-fab id="button" icon="{{icon}}" on-click="_handleClick"></paper-fab>
   </template>
-  <script>
-    (function () {
-      'use strict';
-      var errorCounter = 0, self;
+    <script>
+        (function() {
+            'use strict';
+            var errorCounter = 0,
+                self;
 
-      function reload() {
-        self.$.audio.load();
-        self.$.audio.play();
-      }
-
-      function toggle() {
-        if (self.$.audio.paused) {
-          reload();
-          self.icon = 'av:pause';
-        } else {
-          self.$.audio.pause();
-          self.icon = 'av:play-arrow';
-        }
-      }
-
-      function play() {
-        if (self.$.audio.paused) {
-          reload();
-          self.icon = 'av:pause';
-        }
-      }
-
-      function stop() {
-        if (!self.$.audio.paused) {
-          self.$.audio.pause();
-          self.icon = 'av:play-arrow';
-        }
-      }
-
-      Polymer({ // jshint ignore:line
-        is: 'my-play-button',
-
-        properties: {
-          url: {
-            type: String
-          },
-          icon: {
-            type: String,
-            value: 'av:play-arrow'
-          },
-          volume: {
-            type: Number,
-            value: 100,
-            observer: '_volumeChange'
-          }
-        },
-        _volumeChange: function (volume) {
-          this.$.audio.volume = (volume / 100);
-        },
-        _handleClick: function () {
-          toggle();
-        },
-        ready: function () {
-          self = this;
-          this.$.audio.addEventListener('error', function () {
-            errorCounter++;
-            if (errorCounter < 20) {
-              setTimeout(reload, 10);
-            } else {
-              self.icon = 'av:not-interested';
+            function reload() {
+                self.$.audio.load();
+                self.$.audio.play();
             }
-          });
 
-          this.$.audio.addEventListener('playing', function () {
-            errorCounter = 0;
-            self.icon = 'av:pause';
-          });
-
-          document.addEventListener('keydown', function (e) {
-            if (e.keyCode === 32) {
-              toggle();
-              e.preventDefault();
+            function toggle() {
+                if (self.$.audio.paused) {
+                    reload();
+                    self.icon = 'av:pause';
+                } else {
+                    self.$.audio.pause();
+                    self.icon = 'av:play-arrow';
+                }
             }
-          }, false);
 
-          if (window && window.process && window.process.type) {
-            require('electron').remote.getCurrentWindow().on('app-command', function (e, cmd) {
-              if (cmd === 'media-play-pause') {
-                toggle();
-              } else if (cmd === 'media-play') {
-                play();
-              } else if (cmd === 'media-pause') {
-                stop();
-              } else if (cmd === 'media-stop') {
-                stop();
-              }
+            function play() {
+                if (self.$.audio.paused) {
+                    reload();
+                    self.icon = 'av:pause';
+                }
+            }
+
+            function stop() {
+                if (!self.$.audio.paused) {
+                    self.$.audio.pause();
+                    self.icon = 'av:play-arrow';
+                }
+            }
+
+            Polymer({ // jshint ignore:line
+                is: 'my-play-button',
+
+                properties: {
+                    url: {
+                        type: String
+                    },
+                    icon: {
+                        type: String,
+                        value: 'av:play-arrow'
+                    },
+                    volume: {
+                        type: Number,
+                        value: 100,
+                        observer: '_volumeChange'
+                    }
+                },
+                _volumeChange: function(volume) {
+                    this.$.audio.volume = (volume / 100);
+                },
+                _handleClick: function() {
+                    toggle();
+                },
+                ready: function() {
+                    self = this;
+                    this.$.audio.addEventListener('error', function() {
+                        errorCounter++;
+                        if (errorCounter < 20) {
+                            setTimeout(reload, 10);
+                        } else {
+                            self.icon = 'av:not-interested';
+                        }
+                    });
+
+                    this.$.audio.addEventListener('playing', function() {
+                        errorCounter = 0;
+                        self.icon = 'av:pause';
+                    });
+
+                    document.addEventListener('keydown', function(e) {
+                        if (e.keyCode === 32) {
+                            toggle();
+                            e.preventDefault();
+                        }
+                    }, false);
+
+                    if (window && window.process && window.process.type) {
+                        require('electron').remote.getCurrentWindow().once('ready-to-show', function() {
+                            console.log('yay, ready!');
+                            require('electron').remote.globalShortcut.register('MediaPlayPause', () => {
+                                if (process.platform !== 'linux') {
+                                    toggle();
+                                }
+                            });
+                        });
+                        require('electron').remote.getCurrentWindow().on('app-command', function(e, cmd) {
+                            if (cmd === 'media-play-pause') {
+                                toggle();
+                            } else if (cmd === 'media-play') {
+                                play();
+                            } else if (cmd === 'media-pause') {
+                                stop();
+                            } else if (cmd === 'media-stop') {
+                                stop();
+                            }
+                        });
+                    }
+                }
             });
-          }
-        }
-      });
-    })();
-  </script>
+        })();
+    </script>
 </dom-module>
