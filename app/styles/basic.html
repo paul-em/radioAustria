@@ -9,8 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <style is="custom-style">
-
-  /*
+    /*
    Polymer includes a shim for CSS Custom Properties that we can use for application theming.
    Below, you'll find the default palette for the Polymer Starter Kit layout. Feel free to play
    with changing the colors used or generate your own palette of colours at MaterialPalette.com.
@@ -18,327 +17,320 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
    See https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details
    for further information on custom CSS properties.
    */
-
-  /* Application theme */
-
-  :root {
-    --dark-primary-color: #000000;
-    --default-primary-color: #333333;
-    --light-primary-color: #333333;    /* paper-menu */
-    --text-primary-color: #333333; /*text/icons*/
-    --primary-background-color: #333333;
-    --primary-text-color: #212121;
-    --secondary-text-color: #727272;
-    --disabled-text-color: #bdbdbd;
-    --divider-color: #B6B6B6;
-    --accent-color: var(--default-primary-color);
-
-    /* Components */
-
-    /* paper-drawer-panel*/
-    --drawer-menu-color: #333333;
-    --drawer-border-color: 1px solid #ccc;
-    --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
-
-    /* paper-menu */
-    --paper-menu-background-color: var(--primary-background-color);
-    --menu-link-color:  var(--default-primary-color);
-
-    --paper-fab-keyboard-focus-background: var(--dark-primary-color);
-  }
-
-  body {
-    background: #fafafa;
-    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: #333;
-    user-select: none;
-    cursor: default;
-  }
-
-
-  /* General styles */
-  [drawer] {
-    background-color: var(--primary-background-color);
-  }
-
-  #drawerToolbar {
-    color: var(--light-primary-color);
-    border-bottom: var(--drawer-toolbar-border-color);
-    height: 136px;
-    background: var(--drawer-menu-color) url('../images/paulem.png') no-repeat center;
-    background-size: 100px;
-  }
-
-  paper-drawer-panel /deep/ paper-toolbar.paper-toolbar-0 {
-    transition: background-color .5s;
-  }
-
-  paper-header-panel.paper-header-panel-0 {
-    z-index: 0;
-  }
-
-  #menu-logo {
-    width: 84px;
-    margin-bottom: 70px;
-  }
-
-  .station-toolbar-link{
-    text-decoration: none;
-    color: var(--text-primary-color);
-  }
-
-  my-volume-control {
-    width: calc(100% - 120px);
-    position: absolute;
-    left: 0;
-    bottom: -19px;
-    z-index: 0;
-  }
-
-  my-play-button {
-    position: absolute;
-    bottom: -30px;
-    right: 60px;
-    z-index: 0;
-  }
-
-  paper-material, my-track-list /deep/ paper-material, my-favourites-list /deep/ paper-material, my-settings /deep/ paper-material {
-    border-radius: 2px;
-    height: 100%;
-    padding: 16px 0 16px 0;
-    width: calc(98.66% - 16px);
-    margin: 16px auto;
-    background: white;
-  }
-
-  my-track-list /deep/ .paper-button-0 {
-    min-width: 0px;
-    margin: 0;
-    padding: 0px 5px;
-  }
-
-  paper-menu iron-icon {
-    margin-right: 33px;
-    opacity: 0.54;
-  }
-
-  .paper-menu > .iron-selected {
-    color: var(--default-primary-color);
-  }
-
-  paper-menu a, paper-menu paper-item {
-    text-decoration: none;
-    color: var(--menu-link-color);
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -ms-flex-direction: row;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-    font-family: 'Roboto', 'Noto', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 24px;
-    min-height: 48px;
-    padding: 0 16px;
-  }
-
-  #mainToolbar.tall .middle {
-    font-size: 30px;
-    margin-left: 10px;
-  }
-
-  #mainToolbar .middle {
-    transition: font-size .5s, margin-left .5s;
-    font-size: 20px;
-    padding-bottom: 0;
-    transform-origin: left center;
-  }
-
-  #mainToolbar.tall .bottom.title {
-    opacity: 1;
-  }
-
-  #mainToolbar .bottom.title {
-    opacity: 0;
-    margin-left: 10px;
-    margin-top: -40px;
-  }
-
-  /* Hacky way to put Drop-shadow onto the paper-scroll-header-panel */
-  #dropShadow {
-    transition: opacity 0.5s;
-    height: 6px;
-    box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
-    position: fixed;
-    top: 168px;
-    left: 0;
-    right: 0;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Height of the scroll area */
-  .content {
-    height: 500px;
-  }
-
-  /* Breakpoints */
-
-  /* Small */
-  @media (max-width: 600px) {
-
-    paper-material, my-track-list /deep/ paper-material, my-favourites-list /deep/ paper-material, my-settings /deep/ paper-material {
-      --menu-container-display: none;
-      width: calc(97.33% - 32px);
-      padding-left: 16px;
-      padding-right: 16px;
+    /* Application theme */
+    
+     :root {
+        --dark-primary-color: #000000;
+        --default-primary-color: #333333;
+        --light-primary-color: #333333;
+        /* paper-menu */
+        --text-primary-color: #333333;
+        /*text/icons*/
+        --primary-background-color: #333333;
+        --primary-text-color: #212121;
+        --secondary-text-color: #727272;
+        --disabled-text-color: #bdbdbd;
+        --divider-color: #B6B6B6;
+        --accent-color: var(--default-primary-color);
+        /* Components */
+        /* paper-drawer-panel*/
+        --drawer-menu-color: #333333;
+        --drawer-border-color: 1px solid #ccc;
+        --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+        /* paper-menu */
+        --paper-menu-background-color: var(--primary-background-color);
+        --menu-link-color: var(--default-primary-color);
+        --paper-fab-keyboard-focus-background: var(--dark-primary-color);
     }
-
-    my-favourites-list /deep/ .paper-button-0 {
-      min-width: 0px;
+    
+    body {
+        background: #fafafa;
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #333;
+        user-select: none;
+        cursor: default;
     }
-
-    .paper-font-display1 {
-      font-size: 12px;
+    /* General styles */
+    
+    [drawer] {
+        background-color: var(--primary-background-color);
     }
-
-    .app-name {
-      font-size: 26px;
+    
+    #drawerToolbar {
+        color: var(--light-primary-color);
+        border-bottom: var(--drawer-toolbar-border-color);
+        height: 136px;
+        background: var(--drawer-menu-color);
+        background-size: 100px;
     }
-
-    #drawer .paper-toolbar {
-      margin-left: 16px;
+    
+    paper-drawer-panel /deep/ paper-toolbar.paper-toolbar-0 {
+        transition: background-color .5s;
     }
-
-    #overlay {
-      min-width: 360px;
+    
+    #menu-logo {
+        width: 84px;
+        margin-bottom: 70px;
     }
-
-    .bg {
-      background: white;
+    
+    .station-toolbar-link {
+        text-decoration: none;
+        color: var(--text-primary-color);
     }
-
-  }
-
-  /* Tablet+ */
-  @media (min-width: 601px) {
-
-    paper-material, my-track-list /deep/ paper-material, my-settings /deep/ paper-material {
-      width: calc(98% - 46px);
-      margin-bottom: 32px;
-      padding-left: 30px;
-      padding-right: 30px;
-    }
-
-    my-favourites-list /deep/ paper-material {
-      width: calc(98% - 46px);
-      margin-bottom: 32px;
-      padding-right: 30px;
-    }
-
-    #drawer.paper-drawer-panel > [drawer] {
-      border-right: 1px solid rgba(0, 0, 0, 0.14);
-    }
-
-    iron-pages {
-      padding: 48px 62px;
-    }
-
-  }
-
-  @media all and (min-height: 0) and (max-height: 170px) {
-    paper-header-panel {
-      display: block;
-    }
-
-    my-play-button {
-      bottom: calc(50% - 34px);
-      right: 5%;
-    }
-
-    html /deep/ #main {
-      left: 0 !important;
-    }
-    #mainToolbar {
-      height: 100%;
-    }
-
-    #mainToolbar .bottom.title {
-      display: none !important;
-    }
-
-    #mainToolbar /deep/ #bottomBar {
-      bottom: auto;
-      height: 100%;
-    }
-
-    #mainToolbar /deep/ #middleBar {
-      display: none !important;
-    }
-
-    #mainToolbar /deep/ #topBar {
-      display: none !important;
-    }
-
+    
     my-volume-control {
-      bottom: calc(50% - 20px);
-      width: 60%;
+        width: calc(100% - 120px);
+        position: absolute;
+        left: 0;
+        bottom: -19px;
+        z-index: 0;
     }
-
-    html /deep/ #scrim {
-      display: none;
+    
+    my-play-button {
+        position: absolute;
+        bottom: -30px;
+        right: 60px;
+        z-index: 0;
     }
-
-    html /deep/ #drawer {
-      display: none;
+    
+    paper-material,
+    my-track-list /deep/ paper-material,
+    my-favourites-list /deep/ paper-material,
+    my-settings /deep/ paper-material {
+        border-radius: 2px;
+        height: 100%;
+        padding: 16px 0 16px 0;
+        width: calc(98.66% - 16px);
+        margin: 16px auto;
+        background: white;
     }
-  }
-
-  /* Material Design Adaptive Breakpoints */
-  /*
+    
+    my-track-list /deep/ .paper-button-0 {
+        min-width: 0px;
+        margin: 0;
+        padding: 0px 5px;
+    }
+    
+    paper-menu iron-icon {
+        margin-right: 33px;
+        opacity: 0.54;
+    }
+    
+    .paper-menu>.iron-selected {
+        color: var(--default-primary-color);
+    }
+    
+    paper-menu a,
+    paper-menu paper-item {
+        text-decoration: none;
+        color: var(--menu-link-color);
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        min-height: 48px;
+        padding: 0 16px;
+    }
+    
+    #mainToolbar.tall .middle {
+        font-size: 30px;
+        margin-left: 10px;
+    }
+    
+    #mainToolbar .middle {
+        transition: font-size .5s, margin-left .5s;
+        font-size: 20px;
+        padding-bottom: 0;
+        transform-origin: left center;
+    }
+    
+    #mainToolbar.tall .bottom.title {
+        opacity: 1;
+    }
+    
+    #mainToolbar .bottom.title {
+        opacity: 0;
+        margin-left: 10px;
+        margin-top: -40px;
+    }
+    /* Hacky way to put Drop-shadow onto the paper-scroll-header-panel */
+    
+    #dropShadow {
+        transition: opacity 0.5s;
+        height: 6px;
+        box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+        position: fixed;
+        top: 168px;
+        left: 0;
+        right: 0;
+        opacity: 0;
+        pointer-events: none;
+        z-index: -1;
+    }
+    /* Height of the scroll area */
+    
+    .content {
+        height: 500px;
+    }
+    /* Breakpoints */
+    /* Small */
+    
+    @media (max-width: 600px) {
+        paper-material,
+        my-track-list /deep/ paper-material,
+        my-favourites-list /deep/ paper-material,
+        my-settings /deep/ paper-material {
+            --menu-container-display: none;
+            width: calc(97.33% - 32px);
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+        my-favourites-list /deep/ .paper-button-0 {
+            min-width: 0px;
+        }
+        .paper-font-display1 {
+            font-size: 12px;
+        }
+        .app-name {
+            font-size: 26px;
+        }
+        #drawer .paper-toolbar {
+            margin-left: 16px;
+        }
+        #overlay {
+            min-width: 360px;
+        }
+        .bg {
+            background: white;
+        }
+    }
+    /* Tablet+ */
+    
+    @media (min-width: 601px) {
+        paper-material,
+        my-track-list /deep/ paper-material,
+        my-settings /deep/ paper-material {
+            width: calc(98% - 46px);
+            margin-bottom: 32px;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        my-favourites-list /deep/ paper-material {
+            width: calc(98% - 46px);
+            margin-bottom: 32px;
+            padding-right: 30px;
+        }
+        #drawer.paper-drawer-panel>[drawer] {
+            border-right: 1px solid rgba(0, 0, 0, 0.14);
+        }
+        iron-pages {
+            padding: 48px 62px;
+        }
+    }
+    
+    @media all and (min-height: 0) and (max-height: 170px) {
+        paper-header-panel {
+            display: block;
+        }
+        my-play-button {
+            bottom: calc(50% - 34px);
+            right: 5%;
+        }
+        html /deep/ #main {
+            left: 0 !important;
+        }
+        #mainToolbar {
+            height: 100%;
+        }
+        #mainToolbar .bottom.title {
+            display: none !important;
+        }
+        #mainToolbar /deep/ #bottomBar {
+            bottom: auto;
+            height: 100%;
+        }
+        #mainToolbar /deep/ #middleBar {
+            display: none !important;
+        }
+        #mainToolbar /deep/ #topBar {
+            display: none !important;
+        }
+        my-volume-control {
+            bottom: calc(50% - 20px);
+            width: 60%;
+        }
+        html /deep/ #scrim {
+            display: none;
+        }
+        html /deep/ #drawer {
+            display: none;
+        }
+    }
+    /* Material Design Adaptive Breakpoints */
+    /*
     Below you'll find CSS media queries based on the breakpoint guidance
     published by the Material Design team. You can choose to use, customise
     or remove these breakpoints based on your needs.
 
     http://www.google.com/design/spec/layout/adaptive-ui.html#adaptive-ui-breakpoints
    */
-
-  /* mobile-small */
-  @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) { }
-  /* mobile-large */
-  @media all and (min-width: 361px) and (orientation: portrait) { }
-  /* mobile-small-landscape */
-  @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) { }
-  /* mobile-large-landscape */
-  @media all and (min-width: 481px) and (orientation: landscape) { }
-  /* tablet-small-landscape */
-  @media all and (min-width: 600px) and (max-width: 960px) and (orientation: landscape) { }
-  /* tablet-large-landscape */
-  @media all and (min-width: 961px) and (orientation: landscape) { }
-  /* tablet-small */
-  @media all and (min-width: 600px) and (orientation: portrait) { }
-  /* tablet-large */
-  @media all and (min-width: 601px) and (max-width: 840px) and (orientation : portrait) { }
-  /* desktop-x-small-landscape */
-  @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) { }
-  /* desktop-x-small */
-  @media all and (min-width: 0) and (max-width: 480px) and (max-aspect-ratio: 4/3) { }
-  /* desktop-small-landscape */
-  @media all and (min-width: 481px) and (max-width: 840px) and (orientation: landscape) { }
-  /* desktop-small */
-  @media all and (min-width: 481px) and (max-width: 840px) and (max-aspect-ratio: 4/3) { }
-  /* desktop-medium-landscape */
-  @media all and (min-width: 841px) and (max-width: 1280px) and (orientation: landscape) { }
-  /* desktop-medium */
-  @media all and (min-width: 841px) and (max-width: 1280px) and (max-aspect-ratio: 4/3) { }
-  /* desktop-large */
-  @media all and (min-width: 1281px) and (max-width: 1600px) { }
-  /* desktop-xlarge */
-  @media all and (min-width: 1601px) and (max-width: 1920px) { }
+    /* mobile-small */
+    
+    @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {}
+    /* mobile-large */
+    
+    @media all and (min-width: 361px) and (orientation: portrait) {}
+    /* mobile-small-landscape */
+    
+    @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) {}
+    /* mobile-large-landscape */
+    
+    @media all and (min-width: 481px) and (orientation: landscape) {}
+    /* tablet-small-landscape */
+    
+    @media all and (min-width: 600px) and (max-width: 960px) and (orientation: landscape) {}
+    /* tablet-large-landscape */
+    
+    @media all and (min-width: 961px) and (orientation: landscape) {}
+    /* tablet-small */
+    
+    @media all and (min-width: 600px) and (orientation: portrait) {}
+    /* tablet-large */
+    
+    @media all and (min-width: 601px) and (max-width: 840px) and (orientation: portrait) {}
+    /* desktop-x-small-landscape */
+    
+    @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) {}
+    /* desktop-x-small */
+    
+    @media all and (min-width: 0) and (max-width: 480px) and (max-aspect-ratio: 4/3) {}
+    /* desktop-small-landscape */
+    
+    @media all and (min-width: 481px) and (max-width: 840px) and (orientation: landscape) {}
+    /* desktop-small */
+    
+    @media all and (min-width: 481px) and (max-width: 840px) and (max-aspect-ratio: 4/3) {}
+    /* desktop-medium-landscape */
+    
+    @media all and (min-width: 841px) and (max-width: 1280px) and (orientation: landscape) {}
+    /* desktop-medium */
+    
+    @media all and (min-width: 841px) and (max-width: 1280px) and (max-aspect-ratio: 4/3) {}
+    /* desktop-large */
+    
+    @media all and (min-width: 1281px) and (max-width: 1600px) {}
+    /* desktop-xlarge */
+    
+    @media all and (min-width: 1601px) and (max-width: 1920px) {}
 </style>

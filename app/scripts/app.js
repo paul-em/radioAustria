@@ -7,226 +7,227 @@
  subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 
-(function (document) {
-  'use strict';
+(function(document) {
+    'use strict';
 
-  // Grab a reference to our auto-binding templateGorillaz just releas
-  // and give it some initial binding values
-  // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
-  var manifest;
-  var app = document.querySelector('#app');
-  app.displayInstalledToast = function () {
-    document.querySelector('#caching-complete').show();
-  };
+    // Grab a reference to our auto-binding templateGorillaz just releas
+    // and give it some initial binding values
+    // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
+    var manifest;
+    var app = document.querySelector('#app');
+    app.displayInstalledToast = function() {
+        document.querySelector('#caching-complete').show();
+    };
 
-  // We have to test, whether the site is running in Electron or not, as the imports work elsehow if hosted on a website.
-  var isInElectron = window && window.process && window.process.type;
+    // We have to test, whether the site is running in Electron or not, as the imports work elsehow if hosted on a website.
+    var isInElectron = window && window.process && window.process.type;
 
-  // Listen for template bound event to know when bindings
-  // have resolved and content has been stamped to the page
-  app.addEventListener('dom-change', function () {
-    var $ajaxManifest = document.querySelector('#ajax-manifest');
-    var $version = document.querySelector('#version');
-    var $playButton = document.querySelector('#play-button');
-    var $volumeControl = document.querySelector('#volume-control');
-    var $stationName = document.querySelector('#station-name');
-    var $stationProgram = document.querySelector('#station-program');
-    var $trackLoader = document.querySelector('#track-loader');
-    var $programLoader = document.querySelector('#program-loader');
-    var $trackList = document.querySelector('#track-list');
-    var $stationList = document.querySelector('#station-list');
-    var $settings = document.querySelector('#settings');
-    var $songNotification = document.querySelector('#song-notification');
-    var $programNotification = document.querySelector('#program-notification');
-    var $menuLogo = document.querySelector('#menu-logo');
-    var $stationLink = document.querySelectorAll('.station-link');
+    // Listen for template bound event to know when bindings
+    // have resolved and content has been stamped to the page
+    app.addEventListener('dom-change', function() {
+        var $ajaxManifest = document.querySelector('#ajax-manifest');
+        var $version = document.querySelector('#version');
+        var $playButton = document.querySelector('#play-button');
+        var $volumeControl = document.querySelector('#volume-control');
+        var $stationName = document.querySelector('#station-name');
+        var $stationProgram = document.querySelector('#station-program');
+        var $trackLoader = document.querySelector('#track-loader');
+        var $programLoader = document.querySelector('#program-loader');
+        var $trackList = document.querySelector('#track-list');
+        var $stationList = document.querySelector('#station-list');
+        var $settings = document.querySelector('#settings');
+        var $songNotification = document.querySelector('#song-notification');
+        var $programNotification = document.querySelector('#program-notification');
+        var $menuLogo = document.querySelector('#menu-logo');
+        var $stationLink = document.querySelectorAll('.station-link');
 
-    $programNotification.clear('program');
-    $songNotification.clear('song');
+        $programNotification.clear('program');
+        $songNotification.clear('song');
 
-    $ajaxManifest.addEventListener('error', function (e) {
-      console.error('ajaxManifest error', e);
-      if (isInElectron) $ajaxManifest.url = __dirname + '/manifests/manifest.json'; // jshint ignore:line
-      else $ajaxManifest.url = './manifests/manifest.json'; // jshint ignore:line
-    });
-    $ajaxManifest.addEventListener('response', function (e) {
-      manifest = e.detail.response;
-      if (!manifest) { return; }
-
-      $trackLoader.url = manifest.app.tracklist;
-      $programLoader.url = manifest.app.curProgram;
-      $playButton.url = manifest.app.streamurl;
-      $stationList.selected = manifest.short_name; // jshint ignore:line
-      $stationName.textContent = manifest.name;
-      $version.textContent = manifest.version;
-
-      if (isInElectron) {
-        $menuLogo.src = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-        $programNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-        $songNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-      } else {
-        $menuLogo.src = './images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-        $programNotification.icon = './images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-        $songNotification.icon = './images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
-      }
-
-      for (var i = 0; i < $stationLink.length; i++) {
-        $stationLink[i].href = manifest.app.website;
-      }
-
-      var link = document.createElement('link');
-      link.rel = 'import';
-      if (isInElectron) link.href = __dirname + '/styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
-      else link.href = './styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
-      document.head.appendChild(link);
-
-      link = document.createElement('link');
-      link.rel = 'import';
-      if (isInElectron) link.href = __dirname + '/styles/applyTheme.html?t=' + Math.random(); // jshint ignore:line
-      else link.href = './styles/applyTheme.html?t=' + Math.random(); // jshint ignore:line
-      document.head.appendChild(link);
-
-      document.title = manifest.name;
-      document.querySelector('link[rel=icon]').href = './images/logos/' + manifest.short_name + '-16.png'; // jshint ignore:line
-      document.querySelector('meta[name="theme-color"]').content = manifest.app.color;
-      document.querySelector('meta[name="msapplication-TileColor"]').content = manifest.app.color;
-      document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content = manifest.app.color;
-
-      if (!!(window && window.process && window.process.type)) {
-        var ipcRenderer = require('electron').ipcRenderer;
-        ipcRenderer.sendSync('stationChange', manifest.short_name); // jshint ignore:line
-      }
-    });
-
-    $trackLoader.addEventListener('update', function (e) {
-      $trackList.tracks = e.detail;
-      if ($trackList.tracks[0]) {
-        $songNotification.show({
-          id: 'song',
-          title: manifest.name, // jshint ignore:line
-          message: ($trackList.tracks[0].song || '') + ($trackList.tracks[0].artist ? ' - ' + $trackList.tracks[0].artist : '')
+        $ajaxManifest.addEventListener('error', function(e) {
+            console.error('ajaxManifest error', e);
+            if (isInElectron) $ajaxManifest.url = __dirname + '/manifests/manifest.json'; // jshint ignore:line
+            else $ajaxManifest.url = './manifests/manifest.json'; // jshint ignore:line
         });
-        if (window && window.process && window.process.type) {
-          var media = {
-              artist: ($trackList.tracks[0].artist || ''),
-              song: $trackList.tracks[0].song,
-              artURL: __dirname + '/images/logos/' + manifest.short_name + '-512.png'
-          }, ipcRenderer = require('electron').ipcRenderer;
+        $ajaxManifest.addEventListener('response', function(e) {
+            manifest = e.detail.response;
+            if (!manifest) { return; }
 
-          ipcRenderer.send('change:song', JSON.stringify(media)); // jshint ignore:line
+            $trackLoader.url = manifest.app.tracklist;
+            $programLoader.url = manifest.app.curProgram;
+            $playButton.url = manifest.app.streamurl;
+            $stationList.selected = manifest.short_name; // jshint ignore:line
+            $stationName.textContent = manifest.name;
+            $version.textContent = manifest.version;
+
+            if (isInElectron) {
+                $menuLogo.src = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+                $programNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+                $songNotification.icon = __dirname + '/images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+            } else {
+                $menuLogo.src = './images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+                $programNotification.icon = './images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+                $songNotification.icon = './images/logos/' + manifest.short_name + '-128-round.png'; // jshint ignore:line
+            }
+
+            for (var i = 0; i < $stationLink.length; i++) {
+                $stationLink[i].href = manifest.app.website;
+            }
+
+            var link = document.createElement('link');
+            link.rel = 'import';
+            if (isInElectron) link.href = __dirname + '/styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
+            else link.href = './styles/' + manifest.short_name + '.html?t=' + Math.random(); // jshint ignore:line
+            document.head.appendChild(link);
+
+            link = document.createElement('link');
+            link.rel = 'import';
+            if (isInElectron) link.href = __dirname + '/styles/applyTheme.html?t=' + Math.random(); // jshint ignore:line
+            else link.href = './styles/applyTheme.html?t=' + Math.random(); // jshint ignore:line
+            document.head.appendChild(link);
+
+            document.title = manifest.name;
+            document.querySelector('link[rel=icon]').href = './images/logos/' + manifest.short_name + '-16.png'; // jshint ignore:line
+            document.querySelector('meta[name="theme-color"]').content = manifest.app.color;
+            document.querySelector('meta[name="msapplication-TileColor"]').content = manifest.app.color;
+            document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content = manifest.app.color;
+
+            if (!!(window && window.process && window.process.type)) {
+                var ipcRenderer = require('electron').ipcRenderer;
+                ipcRenderer.sendSync('stationChange', manifest.short_name); // jshint ignore:line
+            }
+        });
+
+        $trackLoader.addEventListener('update', function(e) {
+            $trackList.tracks = e.detail;
+            if ($trackList.tracks[0]) {
+                $songNotification.show({
+                    id: 'song',
+                    title: manifest.name, // jshint ignore:line
+                    message: ($trackList.tracks[0].song || '') + ($trackList.tracks[0].artist ? ' - ' + $trackList.tracks[0].artist : '')
+                });
+                if (window && window.process && window.process.type) {
+                    var media = {
+                            artist: ($trackList.tracks[0].artist || ''),
+                            song: $trackList.tracks[0].song,
+                            artURL: __dirname + '/images/logos/' + manifest.short_name + '-512.png' // jshint ignore:line
+                        },
+                        ipcRenderer = require('electron').ipcRenderer;
+
+                    ipcRenderer.send('change:song', JSON.stringify(media)); // jshint ignore:line
+                }
+            }
+
+            $trackList.favRefresh();
+        });
+        $programLoader.addEventListener('update', function(e) {
+            var response = e.detail;
+            $stationProgram.textContent = response.currentBroadcast || '';
+            if (response && response.currentBroadcast) {
+                $programNotification.show({
+                    id: 'program',
+                    title: manifest.name + ' - program', // jshint ignore:line
+                    message: response.currentBroadcast + ' ( ' + response.currentBroadcastTime + ' - ' + response.nextBroadcastTime + ' )'
+                });
+            }
+        });
+        $volumeControl.addEventListener('update', function(e) {
+            $playButton.volume = e.detail;
+        });
+        $stationList.addEventListener('update', function(e) {
+            if (isInElectron) $ajaxManifest.url = __dirname + '/manifests/manifest-' + e.detail + '.json'; // jshint ignore:line
+            else $ajaxManifest.url = './manifests/manifest-' + e.detail + '.json'; // jshint ignore:line
+        });
+        if (document.location.search.indexOf('station') !== -1) {
+            if (isInElectron) $ajaxManifest.url = __dirname + '/manifests/manifest-' + document.location.search.substr(-3) + '.json'; // jshint ignore:line
+            else $ajaxManifest.url = './manifests/manifest-' + document.location.search.substr(-3) + '.json'; // jshint ignore:line
         }
-      }
-
-      $trackList.favRefresh();
-    });
-    $programLoader.addEventListener('update', function (e) {
-      var response = e.detail;
-      $stationProgram.textContent = response.currentBroadcast || '';
-      if (response && response.currentBroadcast) {
-        $programNotification.show({
-          id: 'program',
-          title: manifest.name + ' - program', // jshint ignore:line
-          message: response.currentBroadcast + ' ( ' + response.currentBroadcastTime + ' - ' + response.nextBroadcastTime + ' )'
+        $settings.addEventListener('update', function(e) {
+            $programNotification.enabled = e.detail.programNotify;
+            $songNotification.enabled = e.detail.songNotify;
+            if (!!(window && window.process && window.process.type)) {
+                var ipcRenderer = require('electron').ipcRenderer;
+                ipcRenderer.sendSync('foreground', !!e.detail.foreground);
+            }
         });
-      }
-    });
-    $volumeControl.addEventListener('update', function (e) {
-      $playButton.volume = e.detail;
-    });
-    $stationList.addEventListener('update', function (e) {
-      if (isInElectron) $ajaxManifest.url = __dirname + '/manifests/manifest-' + e.detail + '.json'; // jshint ignore:line
-      else $ajaxManifest.url = './manifests/manifest-' + e.detail + '.json'; // jshint ignore:line
-    });
-    if (document.location.search.indexOf('station') !== -1) {
-      if (isInElectron) $ajaxManifest.url = __dirname + '/manifests/manifest-' + document.location.search.substr(-3) + '.json'; // jshint ignore:line
-      else $ajaxManifest.url = './manifests/manifest-' + document.location.search.substr(-3) + '.json'; // jshint ignore:line
-    }
-    $settings.addEventListener('update', function (e) {
-      $programNotification.enabled = e.detail.programNotify;
-      $songNotification.enabled = e.detail.songNotify;
-      if (!!(window && window.process && window.process.type)) {
-        var ipcRenderer = require('electron').ipcRenderer;
-        ipcRenderer.sendSync('foreground', !!e.detail.foreground);
-      }
-    });
-  });
-
-
-  // See https://github.com/Polymer/polymer/issues/1381
-  window.addEventListener('WebComponentsReady', function () {
-
-    // We use Page.js for routing. This is a Micro
-    // client-side router inspired by the Express router
-    // More info: https://visionmedia.github.io/page.js/
-    if (window.chrome && window.chrome.app && window.chrome.app.window) {
-      try {
-        //window.history = window.history || {};
-        window.history.pushState = function () {
-        };
-        window.history.replaceState = function () {
-          page.show('/');
-        };
-        window.history.back = function () {
-        };
-      } catch (e) {
-        console.log('failed to overwrite window history');
-      }
-    }
-
-    page('/', function () {
-      app.route = 'home';
     });
 
-    page('/settings', function () {
-      app.route = 'settings';
+
+    // See https://github.com/Polymer/polymer/issues/1381
+    window.addEventListener('WebComponentsReady', function() {
+
+        // We use Page.js for routing. This is a Micro
+        // client-side router inspired by the Express router
+        // More info: https://visionmedia.github.io/page.js/
+        if (window.chrome && window.chrome.app && window.chrome.app.window) {
+            try {
+                //window.history = window.history || {};
+                window.history.pushState = function() {};
+                window.history.replaceState = function() {
+                    page.show('/');
+                };
+                window.history.back = function() {};
+            } catch (e) {
+                console.log('failed to overwrite window history');
+            }
+        }
+
+        page('/', function() {
+            app.route = 'home';
+        });
+
+        page('/settings', function() {
+            app.route = 'settings';
+        });
+
+        page('/info', function() {
+            app.route = 'info';
+        });
+
+        page('/stations', function() {
+            app.route = 'stations';
+        });
+
+        page('/favourites', function() {
+            app.route = 'favourites';
+        });
+
+        // add #! before urls
+        page({
+            hashbang: true
+        });
+
+        if (isInElectron) page.show('/'); // jshint ignore:line
+
     });
 
-    page('/info', function () {
-      app.route = 'info';
+    // Close drawer after menu item is selected if drawerPanel is narrow
+    app.onMenuSelect = function() {
+        var drawerPanel = document.querySelector('#paperDrawerPanel');
+        if (drawerPanel.narrow) {
+            drawerPanel.closeDrawer();
+        }
+    };
+
+    // Custom transformation: scale header's title
+    addEventListener('paper-header-transform', function(e) {
+        var panel = document.querySelector('paper-scroll-header-panel');
+        var title = document.querySelector('#station-name');
+        var botTitle = document.querySelector('.bottom.title');
+        var shadow = document.querySelector('#dropShadow');
+        var d = e.detail;
+        var m = d.height - d.condensedHeight;
+        var scale = Math.max(0.75, (m - d.y) / (m / 0.25) + 0.75);
+        var pos = Math.min(1, d.y / m);
+        var op1 = Math.max(0, (m - d.y) / (m / 0.25) * 3.2);
+        var op = Math.max(0, -d.y / 50 + 1);
+        console.log('L:223 - m:' + m + ', d.y:' + d.y + ', -d.y:' + -d.y + ', op:' + op);
+
+        Polymer.Base.transform('scale(' + scale + ')' + 'translate3d(' + (pos) * 50 + 'px,' + (pos) * ((m < 128) ? 151 : 174) + '%,0) perspective(1px)', title);
+        panel.setAttribute('condensed-header-height', ((m < 128) ? 56 : 64));
+        shadow.style.top = ((m < 128) ? 168 : 192) + 'px';
+        shadow.style.opacity = ((m === d.y) ? 1 : 0);
+        botTitle.style.opacity = op;
     });
-
-    page('/stations', function () {
-      app.route = 'stations';
-    });
-
-    page('/favourites', function () {
-      app.route = 'favourites';
-    });
-
-    // add #! before urls
-    page({
-      hashbang: true
-    });
-
-    if (isInElectron) page.show('/'); // jshint ignore:line
-
-  });
-
-  // Close drawer after menu item is selected if drawerPanel is narrow
-  app.onMenuSelect = function () {
-    var drawerPanel = document.querySelector('#paperDrawerPanel');
-    if (drawerPanel.narrow) {
-      drawerPanel.closeDrawer();
-    }
-  };
-
-  // Custom transformation: scale header's title
-  addEventListener('paper-header-transform', function(e) {
-    var panel = document.querySelector('paper-scroll-header-panel');
-    var title = document.querySelector('#station-name');
-    var botTitle = document.querySelector('.bottom.title');
-    var shadow = document.querySelector('#dropShadow');
-    var d = e.detail;
-    var m = d.height - d.condensedHeight;
-    var scale = Math.max(0.75, (m - d.y) / (m / 0.25)  + 0.75);
-    var pos = Math.min(1, d.y / m);
-    var op = Math.max(0, (m - d.y) / (m / 0.25) * 4);
-
-    Polymer.Base.transform('scale(' + scale + ')' + 'translate3d(' + (pos) * 50 + 'px,' + (pos) * ((m < 128) ? 151 : 174) + '%,0) perspective(1px)', title);
-    panel.setAttribute("condensed-header-height", ((m < 128) ? 56 : 64));
-    shadow.style.top = ((m < 128) ? 168 : 192) + 'px';
-    shadow.style.opacity = ((m === d.y) ? 1 : 0);
-    botTitle.style.opacity = op;
-  });
 
 })(document);
