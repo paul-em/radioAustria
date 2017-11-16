@@ -58,3 +58,4 @@ bower_components
 www
 build
 package-lock.json
+/.vscode/
