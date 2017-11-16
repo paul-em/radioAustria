@@ -106,7 +106,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                     if (window && window.process && window.process.type) {
                         require('electron').remote.getCurrentWindow().once('ready-to-show', function() {
-                            console.log('yay, ready!');
                             require('electron').remote.globalShortcut.register('MediaPlayPause', () => {
                                 if (process.platform !== 'linux') {
                                     toggle();
