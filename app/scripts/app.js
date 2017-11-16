@@ -221,7 +221,6 @@
         var pos = Math.min(1, d.y / m);
         var op1 = Math.max(0, (m - d.y) / (m / 0.25) * 3.2);
         var op = Math.max(0, -d.y / 50 + 1);
-        console.log('L:223 - m:' + m + ', d.y:' + d.y + ', -d.y:' + -d.y + ', op:' + op);
 
         Polymer.Base.transform('scale(' + scale + ')' + 'translate3d(' + (pos) * 50 + 'px,' + (pos) * ((m < 128) ? 151 : 174) + '%,0) perspective(1px)', title);
         panel.setAttribute('condensed-header-height', ((m < 128) ? 56 : 64));
